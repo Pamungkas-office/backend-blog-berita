@@ -1,5 +1,4 @@
 import { db } from "../../../lib/db/db.ts";
-import { posts } from "../../../lib/db/schema.ts";
 import { CustomError } from "../../../lib/custom-error.ts";
 
 export const serviceGetPostBySlug = async (slug: string) => {
