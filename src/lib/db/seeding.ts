@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import { seed } from "drizzle-seed";
-import { users } from "./schema.ts";
+import { users } from "./schema.js";
 import "dotenv/config"; // Untuk membaca file .env
 import bcrypt from "bcryptjs";
 

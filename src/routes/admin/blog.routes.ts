@@ -1,12 +1,12 @@
 import express from 'express';
-import { verifyToken } from '../../middleware/auth.middleware.ts';
-import { requireAdmin } from '../../middleware/admin.middleware.ts';
-import { upload } from '../../lib/upload.ts';
-import { getAllNews } from '../../controllers/admin/blog/getAllNews.ts';
-import { createNewNews } from '../../controllers/admin/blog/createNewNews.ts';
-import { updateNews } from '../../controllers/admin/blog/updateNews.ts';
-import { deleteNews } from '../../controllers/admin/blog/deleteNews.ts';
-import { getNewsById } from '../../controllers/admin/blog/getNewsById.ts';
+import { verifyToken } from '../../middleware/auth.middleware.js';
+import { requireAdmin } from '../../middleware/admin.middleware.js';
+import { upload } from '../../lib/upload.js';
+import { getAllNews } from '../../controllers/admin/blog/getAllNews.js';
+import { createNewNews } from '../../controllers/admin/blog/createNewNews.js';
+import { updateNews } from '../../controllers/admin/blog/updateNews.js';
+import { deleteNews } from '../../controllers/admin/blog/deleteNews.js';
+import { getNewsById } from '../../controllers/admin/blog/getNewsById.js';
 
 const adminBlogRouter = express.Router();
 

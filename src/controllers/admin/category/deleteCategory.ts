@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { serviceDeleteCategory } from "../../../services/admin/category/deleteCategory.ts";
-import { sendSuccess } from "../../../utils/response.ts";
+import { serviceDeleteCategory } from "../../../services/admin/category/deleteCategory.js";
+import { sendSuccess } from "../../../utils/response.js";
 
 export const deleteCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {

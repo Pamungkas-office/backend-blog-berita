@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
-import { serviceCreatePost } from "../../../services/admin/blog/createNews.ts";
-import { sendSuccess } from "../../../utils/response.ts";
-import { generateSlug } from "../../../utils/slug.ts";
+import { serviceCreatePost } from "../../../services/admin/blog/createNews.js";
+import { sendSuccess } from "../../../utils/response.js";
+import { generateSlug } from "../../../utils/slug.js";
 
 export const createNewsSchema = z.object({
   title: z.string(),

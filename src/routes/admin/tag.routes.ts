@@ -1,9 +1,9 @@
 import express from 'express';
-import { verifyToken } from '../../middleware/auth.middleware.ts';
-import { requireAdmin } from '../../middleware/admin.middleware.ts';
-import { createTag } from '../../controllers/admin/tag/createTag.ts';
-import { updateTag } from '../../controllers/admin/tag/updateTag.ts';
-import { deleteTag } from '../../controllers/admin/tag/deleteTag.ts';
+import { verifyToken } from '../../middleware/auth.middleware.js';
+import { requireAdmin } from '../../middleware/admin.middleware.js';
+import { createTag } from '../../controllers/admin/tag/createTag.js';
+import { updateTag } from '../../controllers/admin/tag/updateTag.js';
+import { deleteTag } from '../../controllers/admin/tag/deleteTag.js';
 
 const adminTagRouter = express.Router();
 

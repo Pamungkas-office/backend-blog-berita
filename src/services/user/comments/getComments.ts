@@ -1,6 +1,6 @@
 import { desc, eq } from "drizzle-orm";
-import { db } from "../../../lib/db/db.ts"
-import { comments, posts } from "../../../lib/db/schema.ts";
+import { db } from "../../../lib/db/db.js"
+import { comments, posts } from "../../../lib/db/schema.js";
 
 export const serviceGetComments = async(slug: string) => {
     const commentWithPost = await db.select({

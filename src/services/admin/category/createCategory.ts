@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../../lib/db/db.ts";
-import { categories } from "../../../lib/db/schema.ts";
-import { CustomError } from "../../../lib/custom-error.ts";
+import { db } from "../../../lib/db/db.js";
+import { categories } from "../../../lib/db/schema.js";
+import { CustomError } from "../../../lib/custom-error.js";
 
 export const serviceCreateCategory = async (name: string, slug: string) => {
   const [existing] = await db

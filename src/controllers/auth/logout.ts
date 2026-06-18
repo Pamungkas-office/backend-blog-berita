@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { sendSuccess } from "../../utils/response.ts";
+import { sendSuccess } from "../../utils/response.js";
 
 export const logout = async (_req: Request, res: Response) => {
   res.clearCookie("auth_token");
