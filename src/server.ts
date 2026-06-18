@@ -19,7 +19,7 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:5173/',
+    origin: process.env.CORS_ORIGIN?.split(',') || true,
     credentials: true
 }))
 
