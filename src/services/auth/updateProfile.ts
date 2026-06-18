@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../lib/db/db.js";
-import { users } from "../../lib/db/schema.js";
-import { CustomError } from "../../lib/custom-error.js";
+import { db } from "../../lib/db/db.ts";
+import { users } from "../../lib/db/schema.ts";
+import { CustomError } from "../../lib/custom-error.ts";
 
 export const serviceUpdateProfile = async (
   userId: string,

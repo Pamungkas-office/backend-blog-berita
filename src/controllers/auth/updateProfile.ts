@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
-import { serviceUpdateProfile } from "../../services/auth/updateProfile.js";
-import { sendSuccess } from "../../utils/response.js";
+import { serviceUpdateProfile } from "../../services/auth/updateProfile.ts";
+import { sendSuccess } from "../../utils/response.ts";
 
 const updateProfileSchema = z.object({
   name: z.string().min(3, "Minimal nama terdiri dari 3 karakter").optional(),

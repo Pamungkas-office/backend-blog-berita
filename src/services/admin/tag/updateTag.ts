@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../../lib/db/db.js";
-import { tags } from "../../../lib/db/schema.js";
-import { CustomError } from "../../../lib/custom-error.js";
+import { db } from "../../../lib/db/db.ts";
+import { tags } from "../../../lib/db/schema.ts";
+import { CustomError } from "../../../lib/custom-error.ts";
 
 export const serviceUpdateTag = async (id: number, name: string, slug: string) => {
   const [existing] = await db

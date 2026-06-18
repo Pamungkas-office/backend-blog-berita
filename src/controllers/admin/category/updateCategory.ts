@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
-import { serviceUpdateCategory } from "../../../services/admin/category/updateCategory.js";
-import { sendSuccess } from "../../../utils/response.js";
+import { serviceUpdateCategory } from "../../../services/admin/category/updateCategory.ts";
+import { sendSuccess } from "../../../utils/response.ts";
 
 const categorySchema = z.object({
   name: z.string().min(1, "Nama kategori wajib diisi"),

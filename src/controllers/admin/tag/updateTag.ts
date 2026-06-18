@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
-import { serviceUpdateTag } from "../../../services/admin/tag/updateTag.js";
-import { sendSuccess } from "../../../utils/response.js";
+import { serviceUpdateTag } from "../../../services/admin/tag/updateTag.ts";
+import { sendSuccess } from "../../../utils/response.ts";
 
 const tagSchema = z.object({
   name: z.string().min(1, "Nama tag wajib diisi"),

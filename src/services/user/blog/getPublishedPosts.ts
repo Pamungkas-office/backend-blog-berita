@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../../lib/db/db.js";
-import { posts } from "../../../lib/db/schema.js";
+import { db } from "../../../lib/db/db.ts";
+import { posts } from "../../../lib/db/schema.ts";
 
 export const serviceGetPublishedPosts = async () => {
   const data = await db.query.posts.findMany({

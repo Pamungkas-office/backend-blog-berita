@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../../lib/db/db.js";
-import { categories } from "../../../lib/db/schema.js";
-import { CustomError } from "../../../lib/custom-error.js";
+import { db } from "../../../lib/db/db.ts";
+import { categories } from "../../../lib/db/schema.ts";
+import { CustomError } from "../../../lib/custom-error.ts";
 
 export const serviceDeleteCategory = async (id: number) => {
   const [existing] = await db

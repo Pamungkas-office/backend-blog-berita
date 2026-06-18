@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import { MulterError } from 'multer';
-import { CustomError } from '../lib/custom-error.js';
+import { CustomError } from '../lib/custom-error.ts';
 
 export const error = (err: Error, req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof ZodError) {

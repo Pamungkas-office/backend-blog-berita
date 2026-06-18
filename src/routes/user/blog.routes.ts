@@ -1,6 +1,6 @@
 import express from 'express';
-import { getAllPublishedPost } from '../../controllers/blog/getAllPublishedPost.js';
-import { getPostBySlug } from '../../controllers/blog/getPostBySlug.js';
+import { getAllPublishedPost } from '../../controllers/blog/getAllPublishedPost.ts';
+import { getPostBySlug } from '../../controllers/blog/getPostBySlug.ts';
 
 const blogRouter = express.Router();
 

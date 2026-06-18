@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { serviceDeletePost } from "../../../services/admin/blog/deleteNews.js";
-import { sendSuccess } from "../../../utils/response.js";
+import { serviceDeletePost } from "../../../services/admin/blog/deleteNews.ts";
+import { sendSuccess } from "../../../utils/response.ts";
 
 export const deleteNews = async (req: Request, res: Response, next: NextFunction) => {
   try {

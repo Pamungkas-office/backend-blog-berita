@@ -1,4 +1,4 @@
-import app from "./server.js";
+import app from "./server.ts";
 
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");

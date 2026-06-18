@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { CustomError } from "../lib/custom-error.js";
+import { CustomError } from "../lib/custom-error.ts";
 
 export interface JwtPayload {
     id: string;

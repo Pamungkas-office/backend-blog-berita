@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import * as z from 'zod';
-import { serviceLogin } from "../../services/auth/login.js";
-import { sendSuccess } from "../../utils/response.js";
+import { serviceLogin } from "../../services/auth/login.ts";
+import { sendSuccess } from "../../utils/response.ts";
 
 const loginSchema = z.object({
   email: z.email().min(3, "Minimal email terdiri dari 3 karakter"),

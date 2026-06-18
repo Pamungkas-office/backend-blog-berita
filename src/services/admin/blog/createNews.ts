@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../../lib/db/db.js";
-import { categories, post_tags, posts } from "../../../lib/db/schema.js";
-import { CustomError } from "../../../lib/custom-error.js";
-import { MediaService } from "../../../lib/upload.js";
+import { db } from "../../../lib/db/db.ts";
+import { categories, post_tags, posts } from "../../../lib/db/schema.ts";
+import { CustomError } from "../../../lib/custom-error.ts";
+import { MediaService } from "../../../lib/upload.ts";
 
 export const serviceCreatePost = async (
   userId: number,

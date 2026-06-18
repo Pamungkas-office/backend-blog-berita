@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "rootDir": ".",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "target": "esnext",
     "types": ["node"],
     "lib": ["esnext"],
@@ -19,8 +18,7 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    "allowImportingTsExtensions": false,
-    "noEmit": false
-  },
-  "include": ["src/**/*"]
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
 }

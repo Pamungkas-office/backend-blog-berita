@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import { db } from "../lib/db/db.js";
-import { categories } from "../lib/db/schema.js";
-import { sendSuccess } from "../utils/response.js";
+import { db } from "../lib/db/db.ts";
+import { categories } from "../lib/db/schema.ts";
+import { sendSuccess } from "../utils/response.ts";
 
 export const getAllCategories = async (_req: Request, res: Response, next: NextFunction) => {
   try {

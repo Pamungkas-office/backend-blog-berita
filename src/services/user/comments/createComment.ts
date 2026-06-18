@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../../lib/db/db.js";
-import { CustomError } from "../../../lib/custom-error.js";
-import { comments } from "../../../lib/db/schema.js";
+import { db } from "../../../lib/db/db.ts";
+import { CustomError } from "../../../lib/custom-error.ts";
+import { comments } from "../../../lib/db/schema.ts";
 
 export const serviceCreateComment = async (
   userId: number,

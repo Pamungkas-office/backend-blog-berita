@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { serviceGetComments } from "../../services/user/comments/getComments.js";
-import { sendSuccess } from "../../utils/response.js";
+import { serviceGetComments } from "../../services/user/comments/getComments.ts";
+import { sendSuccess } from "../../utils/response.ts";
 
 export const getComments = async (
   req: Request,

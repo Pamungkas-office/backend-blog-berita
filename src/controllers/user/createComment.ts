@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import { serviceCreateComment } from "../../services/user/comments/createComment.js";
-import { sendSuccess } from "../../utils/response.js";
-import { CustomError } from "../../lib/custom-error.js";
+import { serviceCreateComment } from "../../services/user/comments/createComment.ts";
+import { sendSuccess } from "../../utils/response.ts";
+import { CustomError } from "../../lib/custom-error.ts";
 
 export const createComment = async (
   req: Request,
