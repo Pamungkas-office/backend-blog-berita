@@ -8,12 +8,26 @@ const updatePostSchema = z.object({
   title: z.string().min(5, "Minimal 5 karakter untuk judul").optional(),
   slug: z.string().optional(),
   content: z.string().min(15, "Minimal 15 karakter untuk isi").optional(),
-  category_id: z.number().int().positive().optional(),
+  category_id: z.coerce.number({
+    error: "Category ID harus berupa angka",
+  }).positive("Category ID tidak valid").optional(),
   status: z.enum(["draft", "published"]).optional(),
   thumbnail: z.string().nullable().optional(),
   meta_title: z.string().nullable().optional(),
   meta_description: z.string().nullable().optional(),
-  tag_ids: z.array(z.number().int().positive()).optional(),
+  tag_ids: z
+    .preprocess((val) => {
+      if (typeof val === "string") {
+        if (val === "") return undefined;
+        try {
+          return JSON.parse(val);
+        } catch {
+          return val;
+        }
+      }
+      return val;
+    }, z.array(z.number()))
+    .optional(),
 });
 
 export const updateNews = async (req: Request, res: Response, next: NextFunction) => {
