@@ -1,6 +1,6 @@
 import multer from "multer";
 import { v2 as cloudinary } from 'cloudinary';
-import { CustomError } from "./custom-error";
+import { CustomError } from "./custom-error.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,

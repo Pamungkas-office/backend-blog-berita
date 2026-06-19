@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { serviceGetPublishedPosts } from "../../services/user/blog/getPublishedPosts.ts";
-import { sendSuccess } from "../../utils/response.ts";
+import { serviceGetPublishedPosts } from "../../services/user/blog/getPublishedPosts.js";
+import { sendSuccess } from "../../utils/response.js";
 
 export const getAllPublishedPost = async (_req: Request, res: Response, next: NextFunction) => {
   try {

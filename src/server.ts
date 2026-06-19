@@ -1,16 +1,16 @@
 import express, { json, urlencoded } from "express";
 import cookieParser from "cookie-parser";
-import { error } from "./middleware/error";
-import { notFound } from "./middleware/not-found";
-import authRouter from "./routes/user/auth.routes";
-import blogRouter from "./routes/user/blog.routes";
-import categoryRouter from "./routes/user/category.routes";
-import tagRouter from "./routes/user/tag.routes";
-import adminBlogRouter from "./routes/admin/blog.routes";
-import adminCategoryRouter from "./routes/admin/category.routes";
-import adminTagRouter from "./routes/admin/tag.routes";
-import { db } from "./lib/db/db";
-import commentRoutes from "./routes/user/comment.routes";
+import { error } from "./middleware/error.js";
+import { notFound } from "./middleware/not-found.js";
+import authRouter from "./routes/user/auth.routes.js";
+import blogRouter from "./routes/user/blog.routes.js";
+import categoryRouter from "./routes/user/category.routes.js";
+import tagRouter from "./routes/user/tag.routes.js";
+import adminBlogRouter from "./routes/admin/blog.routes.js";
+import adminCategoryRouter from "./routes/admin/category.routes.js";
+import adminTagRouter from "./routes/admin/tag.routes.js";
+import { db } from "./lib/db/db.js";
+import commentRoutes from "./routes/user/comment.routes.js";
 import cors from "cors";
 
 const app = express();

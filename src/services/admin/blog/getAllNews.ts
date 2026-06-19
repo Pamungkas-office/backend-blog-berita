@@ -1,4 +1,4 @@
-import { db } from "../../../lib/db/db.ts";
+import { db } from "../../../lib/db/db.js";
 
 export const getAllNewsAdmin = async () => {
   const data = await db.query.posts.findMany({

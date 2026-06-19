@@ -1,12 +1,12 @@
 import express from "express";
-import { verifyToken } from "../../middleware/auth.middleware";
-import { requireAdmin } from "../../middleware/admin.middleware";
-import { upload } from "../../lib/upload";
-import { getAllNews } from "../../controllers/admin/blog/getAllNews";
-import { createNewNews } from "../../controllers/admin/blog/createNewNews";
-import { updateNews } from "../../controllers/admin/blog/updateNews";
-import { deleteNews } from "../../controllers/admin/blog/deleteNews";
-import { getNewsById } from "../../controllers/admin/blog/getNewsById";
+import { verifyToken } from "../../middleware/auth.middleware.js";
+import { requireAdmin } from "../../middleware/admin.middleware.js";
+import { upload } from "../../lib/upload.js";
+import { getAllNews } from "../../controllers/admin/blog/getAllNews.js";
+import { createNewNews } from "../../controllers/admin/blog/createNewNews.js";
+import { updateNews } from "../../controllers/admin/blog/updateNews.js";
+import { deleteNews } from "../../controllers/admin/blog/deleteNews.js";
+import { getNewsById } from "../../controllers/admin/blog/getNewsById.js";
 
 const adminBlogRouter = express.Router();
 

@@ -1,9 +1,9 @@
 import express from "express";
-import { verifyToken } from "../../middleware/auth.middleware";
-import { requireAdmin } from "../../middleware/admin.middleware";
-import { createCategory } from "../../controllers/admin/category/createCategory";
-import { updateCategory } from "../../controllers/admin/category/updateCategory";
-import { deleteCategory } from "../../controllers/admin/category/deleteCategory";
+import { verifyToken } from "../../middleware/auth.middleware.js";
+import { requireAdmin } from "../../middleware/admin.middleware.js";
+import { createCategory } from "../../controllers/admin/category/createCategory.js";
+import { updateCategory } from "../../controllers/admin/category/updateCategory.js";
+import { deleteCategory } from "../../controllers/admin/category/deleteCategory.js";
 
 const adminCategoryRouter = express.Router();
 

@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { getAllNewsAdmin } from "../../../services/admin/blog/getAllNews.ts";
-import { sendSuccess } from "../../../utils/response.ts";
+import { getAllNewsAdmin } from "../../../services/admin/blog/getAllNews.js";
+import { sendSuccess } from "../../../utils/response.js";
 
 export const getAllNews = async (_req: Request, res: Response, next: NextFunction) => {
   try {

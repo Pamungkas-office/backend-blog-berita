@@ -1,5 +1,5 @@
-import { db } from "../../../lib/db/db.ts";
-import { CustomError } from "../../../lib/custom-error.ts";
+import { db } from "../../../lib/db/db.js";
+import { CustomError } from "../../../lib/custom-error.js";
 
 export const serviceGetPostBySlug = async (slug: string) => {
   const [post] = await db.query.posts.findMany({

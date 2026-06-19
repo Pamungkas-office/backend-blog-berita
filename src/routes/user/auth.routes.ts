@@ -1,11 +1,11 @@
 import express from "express";
-import { register } from "../../controllers/auth/register";
-import { login } from "../../controllers/auth/login";
-import { logout } from "../../controllers/auth/logout";
-import { me } from "../../controllers/auth/me";
-import { getProfile } from "../../controllers/auth/getProfile";
-import { updateProfile } from "../../controllers/auth/updateProfile";
-import { verifyToken } from "../../middleware/auth.middleware";
+import { register } from "../../controllers/auth/register.js";
+import { login } from "../../controllers/auth/login.js";
+import { logout } from "../../controllers/auth/logout.js";
+import { me } from "../../controllers/auth/me.js";
+import { getProfile } from "../../controllers/auth/getProfile.js";
+import { updateProfile } from "../../controllers/auth/updateProfile.js";
+import { verifyToken } from "../../middleware/auth.middleware.js";
 
 const authRouter = express.Router();
 

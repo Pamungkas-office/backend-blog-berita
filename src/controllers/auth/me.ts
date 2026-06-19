@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { serviceGetMe } from "../../services/auth/getMe.ts";
-import { sendSuccess } from "../../utils/response.ts";
+import { serviceGetMe } from "../../services/auth/getMe.js";
+import { sendSuccess } from "../../utils/response.js";
 
 export const me = async (req: Request, res: Response, next: NextFunction) => {
   try {

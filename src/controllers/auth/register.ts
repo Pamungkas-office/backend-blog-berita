@@ -1,7 +1,7 @@
 import * as z from "zod";
 import type { Request, Response, NextFunction } from "express";
-import { serviceRegister } from "../../services/auth/register.ts";
-import { sendSuccess } from "../../utils/response.ts";
+import { serviceRegister } from "../../services/auth/register.js";
+import { sendSuccess } from "../../utils/response.js";
 
 const registerSchema = z.object({
   name: z.string().min(3, "Minimal nama terdiri dari 3 karakter"),

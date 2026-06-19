@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
-import { serviceUpdatePost } from "../../../services/admin/blog/updateNews.ts";
-import { sendSuccess } from "../../../utils/response.ts";
-import { generateSlug } from "../../../utils/slug.ts";
+import { serviceUpdatePost } from "../../../services/admin/blog/updateNews.js";
+import { sendSuccess } from "../../../utils/response.js";
+import { generateSlug } from "../../../utils/slug.js";
 
 const updatePostSchema = z.object({
   title: z.string().min(5, "Minimal 5 karakter untuk judul").optional(),
