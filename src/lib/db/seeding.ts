@@ -29,6 +29,7 @@ async function main() {
           defaultValue: bcrypt.hashSync("password"),
         }),
         role: funcs.default({ defaultValue: "admin" }),
+        created_at: funcs.default({ defaultValue: new Date().toISOString() }),
       },
     },
   }));

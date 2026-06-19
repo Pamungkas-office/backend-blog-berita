@@ -8,7 +8,7 @@ import { requireUser } from "../../middleware/user.middleware.js";
 
 const commentRoutes = express.Router();
 
-commentRoutes.get("/:slug", verifyToken, requireUser, getComments);
+commentRoutes.get("/:slug", getComments);
 commentRoutes.post("/:slug", verifyToken, requireUser, createComment);
 commentRoutes.patch("/:id", verifyToken, requireUser, updateComment);
 commentRoutes.delete("/:id", verifyToken, requireUser, deleteComment);

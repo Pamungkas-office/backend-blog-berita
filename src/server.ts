@@ -9,6 +9,7 @@ import tagRouter from "./routes/user/tag.routes.js";
 import adminBlogRouter from "./routes/admin/blog.routes.js";
 import adminCategoryRouter from "./routes/admin/category.routes.js";
 import adminTagRouter from "./routes/admin/tag.routes.js";
+import adminCommentRouter from "./routes/admin/comment.routes.js";
 import { db } from "./lib/db/db.js";
 import commentRoutes from "./routes/user/comment.routes.js";
 import cors from "cors";
@@ -58,6 +59,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/admin/posts", adminBlogRouter);
 app.use("/api/admin/categories", adminCategoryRouter);
 app.use("/api/admin/tags", adminTagRouter);
+app.use("/api/admin/comments", adminCommentRouter);
 
 // Error handlers (harus di paling bawah)
 app.use(notFound);
