@@ -6,10 +6,12 @@ import authRouter from "./routes/user/auth.routes.js";
 import blogRouter from "./routes/user/blog.routes.js";
 import categoryRouter from "./routes/user/category.routes.js";
 import tagRouter from "./routes/user/tag.routes.js";
+import adRouter from "./routes/user/ad.routes.js";
 import adminBlogRouter from "./routes/admin/blog.routes.js";
 import adminCategoryRouter from "./routes/admin/category.routes.js";
 import adminTagRouter from "./routes/admin/tag.routes.js";
 import adminCommentRouter from "./routes/admin/comment.routes.js";
+import adminAdRouter from "./routes/admin/ad.routes.js";
 import { db } from "./lib/db/db.js";
 import commentRoutes from "./routes/user/comment.routes.js";
 import cors from "cors";
@@ -23,7 +25,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://frontend-blog-berita.vercel.app",
+      "https://frontend-blog-berita.vercel.app/",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -52,6 +54,9 @@ app.use("/api/tags", tagRouter);
 // Comments
 app.use("/api/comments", commentRoutes);
 
+// Public ad
+app.use("/api/ad-positions", adRouter);
+
 // Auth
 app.use("/api/auth", authRouter);
 
@@ -60,6 +65,7 @@ app.use("/api/admin/posts", adminBlogRouter);
 app.use("/api/admin/categories", adminCategoryRouter);
 app.use("/api/admin/tags", adminTagRouter);
 app.use("/api/admin/comments", adminCommentRouter);
+app.use("/api/admin/ad-positions", adminAdRouter);
 
 // Error handlers (harus di paling bawah)
 app.use(notFound);

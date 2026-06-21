@@ -208,7 +208,7 @@ export const ad_positions = sqliteTable(
      * can emit one — add if your SQLite ≥ 3.25.
      */
     position: text('position', {
-      enum: ['header', 'sidebar', 'in_article', 'footer'],
+      enum: ['auto_ads', 'header', 'sidebar', 'in_article', 'footer'],
     }).notNull(),
     ad_code: text('ad_code').notNull(),
     /** 1 = active, 0 = paused */
