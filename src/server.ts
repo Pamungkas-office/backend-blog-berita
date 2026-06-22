@@ -18,8 +18,8 @@ import cors from "cors";
 
 const app = express();
 
-app.use(json());
-app.use(urlencoded({ extended: true }));
+app.use(json({ limit: '10mb'}));
+app.use(urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(
   cors({
