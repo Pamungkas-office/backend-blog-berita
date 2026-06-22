@@ -69,7 +69,11 @@ export const serviceDeleteAd = async (id: number) => {
 
 export const serviceGetActiveAdByPosition = async (position: string) => {
   const [ad] = await db
-    .select()
+    .select({
+      id: ad_positions.id, 
+      position: ad_positions.position, 
+      is_active: ad_positions.is_active
+    })
     .from(ad_positions)
     .where(
       and(
