@@ -230,7 +230,35 @@ export const ad_positions = sqliteTable(
 );
 
 // ─────────────────────────────────────────────
-// 8. PAGE VIEWS  (analytics / statistics)
+// 8. PASSWORD RESETS  (forgot / reset password flow)
+// ─────────────────────────────────────────────
+export const passwordResets = sqliteTable(
+  'password_resets',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    email: text('email').notNull(),
+    token: text('token').notNull(),
+    expiresAt: text('expires_at').notNull(),
+    usedAt: text('used_at'),
+    createdAt: text('created_at')
+      .notNull()
+      .default(sql`(CURRENT_TIMESTAMP)`),
+  },
+  (t) => ({
+    /** Lookup by hashed token at reset time */
+    tokenIdx: uniqueIndex('password_resets_token_idx').on(t.token),
+    /** Cleanup old tokens for an email before inserting a new one */
+    emailIdx: index('password_resets_email_idx').on(t.email),
+    /** Speed up cleanup of expired + unused tokens (cron / on-read) */
+    expiresUsedIdx: index('password_resets_expires_used_idx').on(
+      t.expiresAt,
+      t.usedAt,
+    ),
+  }),
+);
+
+// ─────────────────────────────────────────────
+// 9. PAGE VIEWS  (analytics / statistics)
 // ─────────────────────────────────────────────
 export const page_views = sqliteTable(
   'page_views',
@@ -306,4 +334,8 @@ export const commentsRelations = relations(comments, ({ one }) => ({
 
 export const pageViewsRelations = relations(page_views, ({ one }) => ({
   post: one(posts, { fields: [page_views.post_id], references: [posts.id] }),
+}));
+
+export const passwordResetsRelations = relations(passwordResets, ({ one }) => ({
+  user: one(users, { fields: [passwordResets.email], references: [users.email] }),
 }));

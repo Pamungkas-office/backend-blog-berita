@@ -8,6 +8,13 @@
       "when": 1781744576110,
       "tag": "0000_dear_argent",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1782200880407,
+      "tag": "0001_low_wolf_cub",
+      "breakpoints": true
     }
   ]
 }

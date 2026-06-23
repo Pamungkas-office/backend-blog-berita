@@ -1,5 +1,7 @@
 import express, { json, urlencoded } from "express";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import cors from "cors";
 import { error } from "./middleware/error.js";
 import { notFound } from "./middleware/not-found.js";
 import authRouter from "./routes/user/auth.routes.js";
@@ -7,26 +9,26 @@ import blogRouter from "./routes/user/blog.routes.js";
 import categoryRouter from "./routes/user/category.routes.js";
 import tagRouter from "./routes/user/tag.routes.js";
 import adRouter from "./routes/user/ad.routes.js";
+import passwordRouter from "./routes/user/password.routes.js";
 import adminBlogRouter from "./routes/admin/blog.routes.js";
 import adminCategoryRouter from "./routes/admin/category.routes.js";
 import adminTagRouter from "./routes/admin/tag.routes.js";
 import adminCommentRouter from "./routes/admin/comment.routes.js";
 import adminAdRouter from "./routes/admin/ad.routes.js";
-import { db } from "./lib/db/db.js";
 import commentRoutes from "./routes/user/comment.routes.js";
-import cors from "cors";
+import { validateEnv, getCorsOrigins } from "./config/env.js";
+
+validateEnv();
 
 const app = express();
 
-app.use(json({ limit: '10mb'}));
-app.use(urlencoded({ extended: true, limit: '10mb' }));
+app.use(helmet());
+app.use(json({ limit: "10mb" }));
+app.use(urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://frontend-blog-berita.vercel.app",
-    ],
+    origin: getCorsOrigins(),
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -59,6 +61,9 @@ app.use("/api/ad-positions", adRouter);
 
 // Auth
 app.use("/api/auth", authRouter);
+
+// Password reset
+app.use("/api/password", passwordRouter);
 
 // Admin
 app.use("/api/admin/posts", adminBlogRouter);

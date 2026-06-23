@@ -2,6 +2,9 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import sharp from "sharp"; 
 import { CustomError } from "./custom-error.js";
+import { configDotenv } from "dotenv";
+
+const maxFileSizeInMB = parseInt(process.env.LIMIT_FILE_SIZE!) || 10;
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -32,7 +35,7 @@ const fileFilter = (
 export const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: maxFileSizeInMB * 1024 * 1024 }
 });
 
 export const MediaService = {
