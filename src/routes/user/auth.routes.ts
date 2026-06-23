@@ -5,6 +5,7 @@ import { logout } from "../../controllers/auth/logout.js";
 import { me } from "../../controllers/auth/me.js";
 import { getProfile } from "../../controllers/auth/getProfile.js";
 import { updateProfile } from "../../controllers/auth/updateProfile.js";
+import { changePassword } from "../../controllers/auth/changePassword.js";
 import { verifyToken } from "../../middleware/auth.middleware.js";
 
 const authRouter = express.Router();
@@ -15,5 +16,6 @@ authRouter.post("/logout", verifyToken, logout);
 authRouter.get("/me", verifyToken, me);
 authRouter.get("/profile", verifyToken, getProfile);
 authRouter.put("/profile", verifyToken, updateProfile);
+authRouter.post("/change-password", verifyToken, changePassword);
 
 export default authRouter;

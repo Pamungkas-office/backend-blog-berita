@@ -100,3 +100,74 @@ export async function sendResetPasswordEmail(
     html,
   });
 }
+
+export async function sendPasswordChangedEmail(
+  email: string,
+  name: string,
+) {
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin:0;padding:0;background-color:#f5f6f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f6f8;padding:32px 16px">
+        <tr>
+          <td align="center">
+            <table width="480" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08)">
+              <tr>
+                <td style="background-color:#1a2b4c;padding:32px 24px;text-align:center">
+                  <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:700">Password Diubah</h1>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:32px 24px">
+                  <p style="margin:0 0 16px;color:#374151;font-size:15px;line-height:1.6">Halo ${name},</p>
+                  <p style="margin:0 0 16px;color:#374151;font-size:15px;line-height:1.6">
+                    Password akun Blog Berita Anda telah berhasil diubah.
+                  </p>
+                  <table cellpadding="0" cellspacing="0" style="margin:24px 0">
+                    <tr>
+                      <td align="center">
+                        <table cellpadding="0" cellspacing="0" style="background-color:#f5f6f8;border-radius:8px;padding:16px 24px">
+                          <tr>
+                            <td style="color:#6b7280;font-size:13px;padding-bottom:4px">Waktu</td>
+                          </tr>
+                          <tr>
+                            <td style="color:#1a2b4c;font-size:14px;font-weight:600">${new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta", dateStyle: "full", timeStyle: "short" })}</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                  <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0">
+                  <p style="margin:0 0 8px;color:#c8102e;font-size:13px;line-height:1.5">
+                    <strong>Bukan Anda?</strong> Jika Anda tidak melakukan perubahan ini,
+                    segera reset password Anda melalui halaman lupa password.
+                  </p>
+                  <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.5">
+                    <a href="${process.env.FRONTEND_URL}/auth/forgot-password" style="color:#1a2b4c;font-weight:500">Reset Password Sekarang</a>
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td style="background-color:#f9fafb;padding:16px 24px;text-align:center">
+                  <p style="margin:0;color:#9ca3af;font-size:12px">&copy; ${new Date().getFullYear()} Blog Berita. All rights reserved.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+
+  return sendEmail({
+    to: email,
+    subject: "Password Berhasil Diubah — Blog Berita",
+    html,
+  });
+}
