@@ -24,18 +24,22 @@ export async function sendEmail(options: SendEmailOptions) {
   const { to, subject, html } = options;
   const transporter = createTransporter();
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM,
-    to,
-    subject,
-    html,
-  });
+  try {
+    await transporter.sendMail({
+      from: process.env.SMTP_FROM,
+      to,
+      subject,
+      html,
+    });
+  } catch (error: any) {
+    console.error("[SMTP Error Detail]", error.message); // ← penting
+    throw error;
+  }
 }
-
 
 export async function sendResetPasswordEmail(
   email: string,
-  resetToken: string
+  resetToken: string,
 ) {
   const frontendUrl = process.env.FRONTEND_URL!;
   const resetLink = `${frontendUrl}/reset-password?token=${resetToken}`;
@@ -110,7 +114,7 @@ export async function sendResetPasswordEmail(
 
 export async function sendVerificationEmail(
   email: string,
-  verificationToken: string
+  verificationToken: string,
 ) {
   const frontendUrl = process.env.FRONTEND_URL!;
   const verificationLink = `${frontendUrl}/verify-email?token=${verificationToken}`;
@@ -183,10 +187,7 @@ export async function sendVerificationEmail(
   });
 }
 
-export async function sendPasswordChangedEmail(
-  email: string,
-  name: string,
-) {
+export async function sendPasswordChangedEmail(email: string, name: string) {
   const html = `
     <!DOCTYPE html>
     <html>
