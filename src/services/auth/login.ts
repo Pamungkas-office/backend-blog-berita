@@ -20,6 +20,13 @@ export const serviceLogin = async (email: string, password: string) => {
     throw new CustomError("Password tidak ditemukan", 401);
   }
 
+  if (!user.email_verified_at) {
+    throw new CustomError(
+      "Email belum diverifikasi. Silakan cek email Anda.",
+      403,
+    );
+  }
+
   const payload = { id: String(user.id), email: user.email, role: user.role };
   const token = jwt.sign(payload, process.env.JWT_SECRET!, {
     expiresIn: (process.env.JWT_EXPIRES_IN || "7d") as any,

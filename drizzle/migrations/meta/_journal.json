@@ -15,6 +15,13 @@
       "when": 1782200880407,
       "tag": "0001_low_wolf_cub",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1783000000000,
+      "tag": "0002_verify_email",
+      "breakpoints": true
     }
   ]
 }

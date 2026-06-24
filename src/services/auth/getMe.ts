@@ -10,6 +10,7 @@ export const serviceGetMe = async (userId: string) => {
       name: users.name,
       email: users.email,
       role: users.role,
+      email_verified_at: users.email_verified_at,
       created_at: users.created_at,
     })
     .from(users)

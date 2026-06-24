@@ -35,6 +35,9 @@ export const users = sqliteTable(
     role: text('role', { enum: ['admin', 'user'] })
       .notNull()
       .default('user'),
+    email_verified_at: text('email_verified_at'),
+    email_verification_token: text('email_verification_token'),
+    email_verification_expires_at: text('email_verification_expires_at'),
     created_at: text('created_at')
       .notNull()
       .default(sql`(CURRENT_TIMESTAMP)`),

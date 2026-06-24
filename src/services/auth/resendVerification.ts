@@ -3,24 +3,37 @@ import { eq } from "drizzle-orm";
 import { db } from "../../lib/db/db.js";
 import { users } from "../../lib/db/schema.js";
 import { CustomError } from "../../lib/custom-error.js";
-import bcrypt from "bcryptjs";
 import { sendVerificationEmail } from "../email/emailService.js";
 
-export const serviceRegister = async (
-  name: string,
-  email: string,
-  password: string,
-) => {
-  const [existingUser] = await db
-    .select()
+export async function serviceResendVerification(email: string): Promise<void> {
+  const [user] = await db
+    .select({
+      id: users.id,
+      email_verified_at: users.email_verified_at,
+      email_verification_expires_at: users.email_verification_expires_at,
+    })
     .from(users)
     .where(eq(users.email, email))
     .limit(1);
-  if (existingUser) {
-    throw new CustomError("Email sudah terdaftar", 409);
+
+  if (!user) {
+    return;
   }
 
-  const hashedPassword = await bcrypt.hash(password, 12);
+  if (user.email_verified_at !== null) {
+    throw new CustomError("Email sudah diverifikasi", 400);
+  }
+
+  // Cek apakah ada token yang masih berlaku (belum expired)
+  if (
+    user.email_verification_expires_at &&
+    user.email_verification_expires_at > new Date().toISOString()
+  ) {
+    throw new CustomError(
+      "Link verifikasi sebelumnya masih berlaku. Silakan cek email Anda.",
+      429,
+    );
+  }
 
   const rawToken = crypto.randomBytes(32).toString("hex");
   const hashedToken = crypto
@@ -31,8 +44,6 @@ export const serviceRegister = async (
     Date.now() + 24 * 60 * 60 * 1000,
   ).toISOString();
 
-  // Kirim email SEBELUM insert user
-  // Jika gagal, throw error — user tidak pernah tersimpan
   try {
     await sendVerificationEmail(email, rawToken);
   } catch {
@@ -42,22 +53,11 @@ export const serviceRegister = async (
     );
   }
 
-  const [user] = await db
-    .insert(users)
-    .values({
-      name,
-      email,
-      password: hashedPassword,
+  await db
+    .update(users)
+    .set({
       email_verification_token: hashedToken,
       email_verification_expires_at: expiresAt,
     })
-    .returning({
-      id: users.id,
-      name: users.name,
-      email: users.email,
-      role: users.role,
-      created_at: users.created_at,
-    });
-
-  return user;
-};
+    .where(eq(users.id, user.id));
+}

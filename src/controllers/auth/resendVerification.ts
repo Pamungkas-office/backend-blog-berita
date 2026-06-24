@@ -1,26 +1,26 @@
 import type { Request, Response, NextFunction } from "express";
 import * as z from "zod";
 import { sendSuccess } from "../../utils/response.js";
-import { serviceForgotPassword } from "../../services/auth/forgotPassword.js";
+import { serviceResendVerification } from "../../services/auth/resendVerification.js";
 
-const forgotPasswordSchema = z.object({
+const resendSchema = z.object({
   email: z.string().email("Email tidak valid"),
 });
 
-export const forgotPassword = async (
+export const resendVerification = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const { email } = forgotPasswordSchema.parse(req.body);
+    const { email } = resendSchema.parse(req.body);
 
-    await serviceForgotPassword(email);
+    await serviceResendVerification(email);
 
     sendSuccess(
       res,
       null,
-      "Jika email terdaftar, link reset password telah dikirim.",
+      "Jika email terdaftar dan belum diverifikasi, link verifikasi telah dikirim.",
     );
   } catch (error) {
     next(error);

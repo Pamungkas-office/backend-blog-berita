@@ -17,7 +17,7 @@ export const register = async (
   try {
     const { name, email, password } = registerSchema.parse(req.body);
     const user = await serviceRegister(name, email, password);
-    sendSuccess(res, user, "Registrasi berhasil", 201);
+    sendSuccess(res, user, "Registrasi berhasil. Silakan cek email untuk verifikasi.", 201);
   } catch (error) {
     next(error);
   }
