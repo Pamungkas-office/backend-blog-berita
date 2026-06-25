@@ -53,8 +53,8 @@ export const updateNews = async (req: Request, res: Response, next: NextFunction
       category_id: data.category_id,
       status: data.status,
       thumbnail,
-      meta_title: data.meta_title ?? null,
-      meta_description: data.meta_description ?? null,
+      meta_title: data.meta_title,
+      meta_description: data.meta_description,
       tag_ids: data.tag_ids,
     });
 

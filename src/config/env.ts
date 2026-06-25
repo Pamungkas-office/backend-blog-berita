@@ -6,6 +6,7 @@ export function validateEnv() {
     "SMTP_PASS",
     "SMTP_FROM",
     "FRONTEND_URL",
+    "GEMINI_API_KEY",
   ] as const;
 
   const missing: string[] = [];

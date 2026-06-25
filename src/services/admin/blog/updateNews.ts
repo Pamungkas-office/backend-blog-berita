@@ -46,8 +46,8 @@ export const serviceUpdatePost = async (
   if (data.category_id !== undefined) updateData.category_id = data.category_id;
   if (data.status !== undefined) updateData.status = data.status;
   if (data.thumbnail !== undefined) updateData.thumbnail = data.thumbnail;
-  if (data.meta_title !== undefined) updateData.meta_title = data.meta_title;
-  if (data.meta_description !== undefined) updateData.meta_description = data.meta_description;
+  if (data.meta_title !== undefined) updateData.meta_title = data.meta_title || null;
+  if (data.meta_description !== undefined) updateData.meta_description = data.meta_description || null;
 
   const updated = await db
     .update(posts)
