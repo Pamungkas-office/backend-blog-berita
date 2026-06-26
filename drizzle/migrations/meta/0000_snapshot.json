@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f77ade9b-4725-475c-a563-58889e4969f3",
+  "id": "6ec8a46f-835f-45e7-bc41-fd2b8b2c66f0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "ad_positions": {
@@ -197,11 +197,18 @@
           "notNull": true,
           "autoincrement": false
         },
-        "ip_address": {
-          "name": "ip_address",
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "visitor_id": {
+          "name": "visitor_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "viewed_at": {
@@ -214,26 +221,18 @@
         }
       },
       "indexes": {
-        "page_views_post_id_idx": {
-          "name": "page_views_post_id_idx",
-          "columns": [
-            "post_id"
-          ],
-          "isUnique": false
-        },
-        "page_views_post_ip_viewed_idx": {
-          "name": "page_views_post_ip_viewed_idx",
-          "columns": [
-            "post_id",
-            "ip_address",
-            "viewed_at"
-          ],
-          "isUnique": false
-        },
         "page_views_viewed_at_idx": {
           "name": "page_views_viewed_at_idx",
           "columns": [
             "viewed_at"
+          ],
+          "isUnique": false
+        },
+        "page_views_visitor_post_idx": {
+          "name": "page_views_visitor_post_idx",
+          "columns": [
+            "visitor_id",
+            "post_id"
           ],
           "isUnique": false
         }
@@ -251,8 +250,97 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
+        },
+        "page_views_user_id_users_id_fk": {
+          "name": "page_views_user_id_users_id_fk",
+          "tableFrom": "page_views",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "password_resets": {
+      "name": "password_resets",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
+        }
+      },
+      "indexes": {
+        "password_resets_token_idx": {
+          "name": "password_resets_token_idx",
+          "columns": [
+            "token"
+          ],
+          "isUnique": true
+        },
+        "password_resets_email_idx": {
+          "name": "password_resets_email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
+        },
+        "password_resets_expires_used_idx": {
+          "name": "password_resets_expires_used_idx",
+          "columns": [
+            "expires_at",
+            "used_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
@@ -569,6 +657,27 @@
           "notNull": true,
           "autoincrement": false,
           "default": "'user'"
+        },
+        "email_verified_at": {
+          "name": "email_verified_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email_verification_token": {
+          "name": "email_verification_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "email_verification_expires_at": {
+          "name": "email_verification_expires_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         },
         "created_at": {
           "name": "created_at",

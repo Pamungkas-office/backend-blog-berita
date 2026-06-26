@@ -28,14 +28,27 @@ CREATE INDEX `comments_user_id_idx` ON `comments` (`user_id`);--> statement-brea
 CREATE TABLE `page_views` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`post_id` integer NOT NULL,
-	`ip_address` text NOT NULL,
+	`user_id` integer,
+	`visitor_id` text,
 	`viewed_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
-	FOREIGN KEY (`post_id`) REFERENCES `posts`(`id`) ON UPDATE no action ON DELETE cascade
+	FOREIGN KEY (`post_id`) REFERENCES `posts`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE set null
 );
 --> statement-breakpoint
-CREATE INDEX `page_views_post_id_idx` ON `page_views` (`post_id`);--> statement-breakpoint
-CREATE INDEX `page_views_post_ip_viewed_idx` ON `page_views` (`post_id`,`ip_address`,`viewed_at`);--> statement-breakpoint
 CREATE INDEX `page_views_viewed_at_idx` ON `page_views` (`viewed_at`);--> statement-breakpoint
+CREATE INDEX `page_views_visitor_post_idx` ON `page_views` (`visitor_id`,`post_id`);--> statement-breakpoint
+CREATE TABLE `password_resets` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`email` text NOT NULL,
+	`token` text NOT NULL,
+	`expires_at` text NOT NULL,
+	`used_at` text,
+	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `password_resets_token_idx` ON `password_resets` (`token`);--> statement-breakpoint
+CREATE INDEX `password_resets_email_idx` ON `password_resets` (`email`);--> statement-breakpoint
+CREATE INDEX `password_resets_expires_used_idx` ON `password_resets` (`expires_at`,`used_at`);--> statement-breakpoint
 CREATE TABLE `post_tags` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`post_id` integer NOT NULL,
@@ -81,6 +94,9 @@ CREATE TABLE `users` (
 	`email` text NOT NULL,
 	`password` text NOT NULL,
 	`role` text DEFAULT 'user' NOT NULL,
+	`email_verified_at` text,
+	`email_verification_token` text,
+	`email_verification_expires_at` text,
 	`created_at` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
 --> statement-breakpoint

@@ -23,8 +23,8 @@ async function main() {
       count: 1,
       columns: {
         id: funcs.default({ defaultValue: 1 }),
-        name: funcs.default({ defaultValue: "Admin" }),
-        email: funcs.default({ defaultValue: "admin@gmail.com"}),
+        name: funcs.default({ defaultValue: "Aji Pamungkas" }),
+        email: funcs.default({ defaultValue: "ajipamungkasoffice7308@gmail.com"}),
         password: funcs.default({
           defaultValue: bcrypt.hashSync("password"),
         }),

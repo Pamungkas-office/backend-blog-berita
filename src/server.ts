@@ -15,6 +15,7 @@ import adminCategoryRouter from "./routes/admin/category.routes.js";
 import adminTagRouter from "./routes/admin/tag.routes.js";
 import adminCommentRouter from "./routes/admin/comment.routes.js";
 import adminAdRouter from "./routes/admin/ad.routes.js";
+import adminStatsRouter from "./routes/admin/stats.routes.js";
 import commentRoutes from "./routes/user/comment.routes.js";
 import { validateEnv, getCorsOrigins } from "./config/env.js";
 
@@ -30,7 +31,7 @@ app.use(
   cors({
     origin: getCorsOrigins(),
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Visitor-Id"],
     credentials: true,
   }),
 );
@@ -71,6 +72,7 @@ app.use("/api/admin/categories", adminCategoryRouter);
 app.use("/api/admin/tags", adminTagRouter);
 app.use("/api/admin/comments", adminCommentRouter);
 app.use("/api/admin/ad-positions", adminAdRouter);
+app.use("/api/admin/stats", adminStatsRouter);
 
 // Error handlers (harus di paling bawah)
 app.use(notFound);

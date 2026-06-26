@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1781744576110,
-      "tag": "0000_dear_argent",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1782200880407,
-      "tag": "0001_low_wolf_cub",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1783000000000,
-      "tag": "0002_verify_email",
+      "when": 1782458907107,
+      "tag": "0000_normal_ego",
       "breakpoints": true
     }
   ]

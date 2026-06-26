@@ -6,7 +6,6 @@ export function validateEnv() {
     "SMTP_PASS",
     "SMTP_FROM",
     "FRONTEND_URL",
-    "GEMINI_API_KEY",
   ] as const;
 
   const missing: string[] = [];
@@ -21,6 +20,16 @@ export function validateEnv() {
     throw new Error(
       `Environment variables missing: ${missing.join(", ")}. ` +
         "Set them in .env or in your hosting dashboard."
+    );
+  }
+
+  const hasGemini = !!process.env.GEMINI_API_KEY;
+  const hasGroq = !!process.env.GROQ_API_KEY;
+
+  if (!hasGemini && !hasGroq) {
+    throw new Error(
+      "Setidaknya satu AI provider harus dikonfigurasi. " +
+      "Set GEMINI_API_KEY atau GROQ_API_KEY di .env"
     );
   }
 

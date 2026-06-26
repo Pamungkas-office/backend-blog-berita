@@ -12,41 +12,41 @@
  *    TIMESTAMP type; text comparisons on ISO strings are index-safe
  */
 
-import { relations, sql } from 'drizzle-orm';
+import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
   sqliteTable,
   text,
   uniqueIndex,
-} from 'drizzle-orm/sqlite-core';
+} from "drizzle-orm/sqlite-core";
 
 // ─────────────────────────────────────────────
 // 1. USERS
 // ─────────────────────────────────────────────
 export const users = sqliteTable(
-  'users',
+  "users",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    name: text('name').notNull(),
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    name: text("name").notNull(),
     /** Unique enforced via uniqueIndex below */
-    email: text('email').notNull(),
-    password: text('password').notNull(),
-    role: text('role', { enum: ['admin', 'user'] })
+    email: text("email").notNull(),
+    password: text("password").notNull(),
+    role: text("role", { enum: ["admin", "user"] })
       .notNull()
-      .default('user'),
-    email_verified_at: text('email_verified_at'),
-    email_verification_token: text('email_verification_token'),
-    email_verification_expires_at: text('email_verification_expires_at'),
-    created_at: text('created_at')
+      .default("user"),
+    email_verified_at: text("email_verified_at"),
+    email_verification_token: text("email_verification_token"),
+    email_verification_expires_at: text("email_verification_expires_at"),
+    created_at: text("created_at")
       .notNull()
       .default(sql`(CURRENT_TIMESTAMP)`),
   },
   (t) => ({
     /** Primary lookup: login / session resolution */
-    emailIdx: uniqueIndex('users_email_idx').on(t.email),
+    emailIdx: uniqueIndex("users_email_idx").on(t.email),
     /** Filter by role (admin dashboards, permission checks) */
-    roleIdx: index('users_role_idx').on(t.role),
+    roleIdx: index("users_role_idx").on(t.role),
   }),
 );
 
@@ -54,14 +54,14 @@ export const users = sqliteTable(
 // 2. CATEGORIES
 // ─────────────────────────────────────────────
 export const categories = sqliteTable(
-  'categories',
+  "categories",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    name: text('name').notNull(),
-    slug: text('slug').notNull(),
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
   },
   (t) => ({
-    slugIdx: uniqueIndex('categories_slug_idx').on(t.slug),
+    slugIdx: uniqueIndex("categories_slug_idx").on(t.slug),
   }),
 );
 
@@ -69,14 +69,14 @@ export const categories = sqliteTable(
 // 3. TAGS
 // ─────────────────────────────────────────────
 export const tags = sqliteTable(
-  'tags',
+  "tags",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    name: text('name').notNull(),
-    slug: text('slug').notNull(),
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
   },
   (t) => ({
-    slugIdx: uniqueIndex('tags_slug_idx').on(t.slug),
+    slugIdx: uniqueIndex("tags_slug_idx").on(t.slug),
   }),
 );
 
@@ -84,53 +84,53 @@ export const tags = sqliteTable(
 // 4. POSTS
 // ─────────────────────────────────────────────
 export const posts = sqliteTable(
-  'posts',
+  "posts",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
+    id: integer("id").primaryKey({ autoIncrement: true }),
     /** FK → users.id  (author) */
-    user_id: integer('user_id')
+    user_id: integer("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: 'restrict' }),
+      .references(() => users.id, { onDelete: "restrict" }),
     /** FK → categories.id */
-    category_id: integer('category_id')
+    category_id: integer("category_id")
       .notNull()
-      .references(() => categories.id, { onDelete: 'restrict' }),
-    title: text('title').notNull(),
-    slug: text('slug').notNull(),
-    content: text('content').notNull(),
+      .references(() => categories.id, { onDelete: "restrict" }),
+    title: text("title").notNull(),
+    slug: text("slug").notNull(),
+    content: text("content").notNull(),
     /** URL thumbnail/cover image */
-    thumbnail: text('thumbnail'),
+    thumbnail: text("thumbnail"),
     /** draft | published */
-    status: text('status', { enum: ['draft', 'published'] })
+    status: text("status", { enum: ["draft", "published"] })
       .notNull()
-      .default('draft'),
+      .default("draft"),
     /** SEO */
-    meta_title: text('meta_title'),
-    meta_description: text('meta_description'),
-    created_at: text('created_at')
+    meta_title: text("meta_title"),
+    meta_description: text("meta_description"),
+    created_at: text("created_at")
       .notNull()
       .default(sql`(CURRENT_TIMESTAMP)`),
   },
   (t) => ({
     /** URL resolution — most frequent public query */
-    slugIdx: uniqueIndex('posts_slug_idx').on(t.slug),
+    slugIdx: uniqueIndex("posts_slug_idx").on(t.slug),
     /** Author page / dashboard listing */
-    userIdx: index('posts_user_id_idx').on(t.user_id),
+    userIdx: index("posts_user_id_idx").on(t.user_id),
     /** Category archive page */
-    categoryIdx: index('posts_category_id_idx').on(t.category_id),
+    categoryIdx: index("posts_category_id_idx").on(t.category_id),
     /**
      * Covering index: category archive sorted by newest-first.
      * Satisfies: WHERE category_id = ? ORDER BY created_at DESC
      * without a separate sort pass.
      */
-    categoryCreatedIdx: index('posts_category_created_idx').on(
+    categoryCreatedIdx: index("posts_category_created_idx").on(
       t.category_id,
       t.created_at,
     ),
     /** Feed / homepage: all posts newest-first */
-    createdAtIdx: index('posts_created_at_idx').on(t.created_at),
+    createdAtIdx: index("posts_created_at_idx").on(t.created_at),
     /** Filter published / draft posts */
-    statusIdx: index('posts_status_idx').on(t.status),
+    statusIdx: index("posts_status_idx").on(t.status),
   }),
 );
 
@@ -138,15 +138,15 @@ export const posts = sqliteTable(
 // 5. POST ↔ TAGS  (Many-to-Many junction)
 // ─────────────────────────────────────────────
 export const post_tags = sqliteTable(
-  'post_tags',
+  "post_tags",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    post_id: integer('post_id')
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    post_id: integer("post_id")
       .notNull()
-      .references(() => posts.id, { onDelete: 'cascade' }),
-    tag_id: integer('tag_id')
+      .references(() => posts.id, { onDelete: "cascade" }),
+    tag_id: integer("tag_id")
       .notNull()
-      .references(() => tags.id, { onDelete: 'cascade' }),
+      .references(() => tags.id, { onDelete: "cascade" }),
   },
   (t) => ({
     /**
@@ -154,7 +154,7 @@ export const post_tags = sqliteTable(
      *  - Prevents duplicate (post, tag) pairs
      *  - Acts as a covering index for both directions of the M:N join
      */
-    postTagUniqueIdx: uniqueIndex('post_tags_post_tag_idx').on(
+    postTagUniqueIdx: uniqueIndex("post_tags_post_tag_idx").on(
       t.post_id,
       t.tag_id,
     ),
@@ -162,7 +162,7 @@ export const post_tags = sqliteTable(
      * Reverse index: "which posts have tag X?" lookup
      * (tag cloud, tag archive page)
      */
-    tagPostIdx: index('post_tags_tag_post_idx').on(t.tag_id, t.post_id),
+    tagPostIdx: index("post_tags_tag_post_idx").on(t.tag_id, t.post_id),
   }),
 );
 
@@ -170,30 +170,30 @@ export const post_tags = sqliteTable(
 // 6. COMMENTS
 // ─────────────────────────────────────────────
 export const comments = sqliteTable(
-  'comments',
+  "comments",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    post_id: integer('post_id')
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    post_id: integer("post_id")
       .notNull()
-      .references(() => posts.id, { onDelete: 'cascade' }),
+      .references(() => posts.id, { onDelete: "cascade" }),
     /** Nullable — anonymous visitor comments are allowed */
-    user_id: integer('user_id').references(() => users.id, {
-      onDelete: 'set null',
+    user_id: integer("user_id").references(() => users.id, {
+      onDelete: "set null",
     }),
     /** Display name for anonymous comments */
-    comment: text('comment').notNull(),
-    created_at: text('created_at')
+    comment: text("comment").notNull(),
+    created_at: text("created_at")
       .notNull()
       .default(sql`(CURRENT_TIMESTAMP)`),
   },
   (t) => ({
     /** Load comments for a post thread, newest-first */
-    postCreatedIdx: index('comments_post_created_idx').on(
+    postCreatedIdx: index("comments_post_created_idx").on(
       t.post_id,
       t.created_at,
     ),
     /** Lookup all comments by a registered user */
-    userIdx: index('comments_user_id_idx').on(t.user_id),
+    userIdx: index("comments_user_id_idx").on(t.user_id),
   }),
 );
 
@@ -201,21 +201,21 @@ export const comments = sqliteTable(
 // 7. AD POSITIONS
 // ─────────────────────────────────────────────
 export const ad_positions = sqliteTable(
-  'ad_positions',
+  "ad_positions",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
+    id: integer("id").primaryKey({ autoIncrement: true }),
     /**
      * Allowed values: 'header' | 'sidebar' | 'in_article' | 'footer'
      * Enforced at the application layer (Zod / class-validator).
      * SQLite has no CHECK constraint in older versions, but drizzle
      * can emit one — add if your SQLite ≥ 3.25.
      */
-    position: text('position', {
-      enum: ['auto_ads', 'header', 'sidebar', 'in_article', 'footer'],
+    position: text("position", {
+      enum: ["auto_ads", "header", "sidebar", "in_article", "footer"],
     }).notNull(),
-    ad_code: text('ad_code').notNull(),
+    ad_code: text("ad_code").notNull(),
     /** 1 = active, 0 = paused */
-    is_active: integer('is_active', { mode: 'boolean' })
+    is_active: integer("is_active", { mode: "boolean" })
       .notNull()
       .default(true),
   },
@@ -225,7 +225,7 @@ export const ad_positions = sqliteTable(
      * WHERE position = ? AND is_active = 1
      * This composite index covers both predicates.
      */
-    positionActiveIdx: index('ad_positions_position_active_idx').on(
+    positionActiveIdx: index("ad_positions_position_active_idx").on(
       t.position,
       t.is_active,
     ),
@@ -236,24 +236,24 @@ export const ad_positions = sqliteTable(
 // 8. PASSWORD RESETS  (forgot / reset password flow)
 // ─────────────────────────────────────────────
 export const passwordResets = sqliteTable(
-  'password_resets',
+  "password_resets",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    email: text('email').notNull(),
-    token: text('token').notNull(),
-    expiresAt: text('expires_at').notNull(),
-    usedAt: text('used_at'),
-    createdAt: text('created_at')
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    email: text("email").notNull(),
+    token: text("token").notNull(),
+    expiresAt: text("expires_at").notNull(),
+    usedAt: text("used_at"),
+    createdAt: text("created_at")
       .notNull()
       .default(sql`(CURRENT_TIMESTAMP)`),
   },
   (t) => ({
     /** Lookup by hashed token at reset time */
-    tokenIdx: uniqueIndex('password_resets_token_idx').on(t.token),
+    tokenIdx: uniqueIndex("password_resets_token_idx").on(t.token),
     /** Cleanup old tokens for an email before inserting a new one */
-    emailIdx: index('password_resets_email_idx').on(t.email),
+    emailIdx: index("password_resets_email_idx").on(t.email),
     /** Speed up cleanup of expired + unused tokens (cron / on-read) */
-    expiresUsedIdx: index('password_resets_expires_used_idx').on(
+    expiresUsedIdx: index("password_resets_expires_used_idx").on(
       t.expiresAt,
       t.usedAt,
     ),
@@ -264,37 +264,26 @@ export const passwordResets = sqliteTable(
 // 9. PAGE VIEWS  (analytics / statistics)
 // ─────────────────────────────────────────────
 export const page_views = sqliteTable(
-  'page_views',
+  "page_views",
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
-    post_id: integer('post_id')
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    post_id: integer("post_id")
       .notNull()
-      .references(() => posts.id, { onDelete: 'cascade' }),
-    ip_address: text('ip_address').notNull(),
-    viewed_at: text('viewed_at')
+      .references(() => posts.id, { onDelete: "cascade" }),
+    user_id: integer("user_id").references(() => users.id, {
+      onDelete: "set null",
+    }),
+    visitor_id: text("visitor_id"),
+    viewed_at: text("viewed_at")
       .notNull()
       .default(sql`(CURRENT_TIMESTAMP)`),
   },
   (t) => ({
-    /**
-     * Aggregate view counts per post:
-     * SELECT COUNT(*) FROM page_views WHERE post_id = ?
-     */
-    postIdx: index('page_views_post_id_idx').on(t.post_id),
-    /**
-     * Unique-visitor deduplication within a time window:
-     * WHERE post_id = ? AND ip_address = ? AND viewed_at > ?
-     */
-    postIpViewedIdx: index('page_views_post_ip_viewed_idx').on(
+    viewedAtIdx: index("page_views_viewed_at_idx").on(t.viewed_at),
+    visitorPostIdx: index("page_views_visitor_post_idx").on(
+      t.visitor_id,
       t.post_id,
-      t.ip_address,
-      t.viewed_at,
     ),
-    /**
-     * Trend / time-series queries (daily / weekly stats dashboard):
-     * WHERE viewed_at BETWEEN ? AND ?
-     */
-    viewedAtIdx: index('page_views_viewed_at_idx').on(t.viewed_at),
   }),
 );
 
@@ -337,8 +326,12 @@ export const commentsRelations = relations(comments, ({ one }) => ({
 
 export const pageViewsRelations = relations(page_views, ({ one }) => ({
   post: one(posts, { fields: [page_views.post_id], references: [posts.id] }),
+  user: one(users, { fields: [page_views.user_id], references: [users.id] }),
 }));
 
 export const passwordResetsRelations = relations(passwordResets, ({ one }) => ({
-  user: one(users, { fields: [passwordResets.email], references: [users.email] }),
+  user: one(users, {
+    fields: [passwordResets.email],
+    references: [users.email],
+  }),
 }));

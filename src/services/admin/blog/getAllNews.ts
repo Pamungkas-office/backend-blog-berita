@@ -1,4 +1,5 @@
 import { db } from "../../../lib/db/db.js";
+import { getViewsPerPost } from "../../user/blog/pageView.service.js";
 
 export const getAllNewsAdmin = async () => {
   const data = await db.query.posts.findMany({
@@ -16,5 +17,11 @@ export const getAllNewsAdmin = async () => {
     orderBy: (posts, { desc }) => [desc(posts.created_at)],
   });
 
-  return data;
+  const postIds = data.map((p) => p.id);
+  const viewsMap = await getViewsPerPost(postIds);
+
+  return data.map((post) => ({
+    ...post,
+    view_count: viewsMap[post.id] ?? 0,
+  }));
 };
