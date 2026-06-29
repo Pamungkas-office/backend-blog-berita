@@ -60,9 +60,11 @@ export const serviceUpdatePost = async (
   if (data.tag_ids !== undefined) {
     await db.delete(post_tags).where(eq(post_tags.post_id, id));
 
-    if (data.tag_ids.length > 0) {
+    const uniqueTagIds = [...new Set(data.tag_ids)];
+
+    if (uniqueTagIds.length > 0) {
       await db.insert(post_tags).values(
-        data.tag_ids.map((tag_id) => ({ post_id: id, tag_id })),
+        uniqueTagIds.map((tag_id) => ({ post_id: id, tag_id })),
       );
     }
   }

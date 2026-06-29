@@ -8,6 +8,45 @@ const categorySchema = z.object({
   slug: z.string().min(1, "Slug kategori wajib diisi"),
 });
 
+/**
+ * @openapi
+ * /api/admin/categories:
+ *   post:
+ *     tags: [Admin Categories]
+ *     summary: Create a category
+ *     description: Create a new category (requires admin)
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - slug
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Teknologi
+ *               slug:
+ *                 type: string
+ *                 example: teknologi
+ *     responses:
+ *       201:
+ *         description: Category created
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - admin only
+ *       409:
+ *         description: Slug already used
+ *       500:
+ *         description: Internal server error
+ */
 export const createCategory = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = categorySchema.parse(req.body);

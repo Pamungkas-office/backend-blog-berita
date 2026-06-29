@@ -57,9 +57,11 @@ export const serviceCreatePost = async (
 
   const post = inserted[0]!;
 
-  if (data.tag_ids && data.tag_ids.length > 0) {
+  const uniqueTagIds = data.tag_ids ? [...new Set(data.tag_ids)] : [];
+
+  if (uniqueTagIds.length > 0) {
     await db.insert(post_tags).values(
-      data.tag_ids.map((tag_id) => ({ post_id: post.id, tag_id })),
+      uniqueTagIds.map((tag_id) => ({ post_id: post.id, tag_id })),
     );
   }
 

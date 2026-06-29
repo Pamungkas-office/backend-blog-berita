@@ -1,0 +1,3232 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Blog Berita API",
+    "version": "1.0.0",
+    "description": "API documentation for Blog Berita application. This API provides endpoints for managing news articles, categories, tags, comments, advertisements, and user authentication."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    },
+    {
+      "url": "https://backend-blog-berita.vercel.app",
+      "description": "Production server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints (register, login, logout, profile)"
+    },
+    {
+      "name": "Password",
+      "description": "Password management endpoints (forgot, reset)"
+    },
+    {
+      "name": "Blog Public",
+      "description": "Public blog post endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Public category endpoints"
+    },
+    {
+      "name": "Tags",
+      "description": "Public tag endpoints"
+    },
+    {
+      "name": "Ad Positions",
+      "description": "Public advertisement endpoints"
+    },
+    {
+      "name": "Comments",
+      "description": "User comment endpoints (CRUD)"
+    },
+    {
+      "name": "Admin Blog",
+      "description": "Admin blog post management"
+    },
+    {
+      "name": "Admin Categories",
+      "description": "Admin category management"
+    },
+    {
+      "name": "Admin Tags",
+      "description": "Admin tag management"
+    },
+    {
+      "name": "Admin Comments",
+      "description": "Admin comment management"
+    },
+    {
+      "name": "Admin Ad Positions",
+      "description": "Admin advertisement management"
+    },
+    {
+      "name": "Admin Stats",
+      "description": "Admin statistics endpoints"
+    }
+  ],
+  "paths": {
+    "/api/tags": {
+      "get": {
+        "tags": [
+          "Tags"
+        ],
+        "summary": "Get all tags",
+        "description": "Retrieve a list of all tags ordered by name",
+        "responses": {
+          "200": {
+            "description": "List of tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Daftar tag berhasil diambil"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Get all categories",
+        "description": "Retrieve a list of all categories ordered by name",
+        "responses": {
+          "200": {
+            "description": "List of categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Daftar kategori berhasil diambil"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/comments/{id}": {
+      "patch": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Update a comment",
+        "description": "Update your own comment (requires authentication)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Comment ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "comment"
+                ],
+                "properties": {
+                  "comment": {
+                    "type": "string",
+                    "description": "Updated comment text"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - not your comment"
+          },
+          "404": {
+            "description": "Comment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Delete a comment",
+        "description": "Delete your own comment (requires authentication)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Comment ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - not your comment"
+          },
+          "404": {
+            "description": "Comment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/comments/{slug}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Get comments by post slug",
+        "description": "Retrieve all comments for a specific post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Post slug"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of comments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "comment": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Comments"
+        ],
+        "summary": "Create a comment",
+        "description": "Add a comment to a post (requires authentication)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Post slug"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "comment"
+                ],
+                "properties": {
+                  "comment": {
+                    "type": "string",
+                    "description": "Comment text"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comment created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Komentar berhasil ditambahkan"
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input or empty comment"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/ad-positions/{position}": {
+      "get": {
+        "tags": [
+          "Ad Positions"
+        ],
+        "summary": "Get active ad by position",
+        "description": "Retrieve the active advertisement for a specific position",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "position",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "auto_ads",
+                "header",
+                "sidebar",
+                "in_article",
+                "footer"
+              ]
+            },
+            "description": "Ad position identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ad data or null if no active ad",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "nullable": true,
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "position": {
+                          "type": "string"
+                        },
+                        "is_active": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid position"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/posts/{slug}/view": {
+      "post": {
+        "tags": [
+          "Blog Public"
+        ],
+        "summary": "Record page view",
+        "description": "Record a page view for a post. Requires X-Visitor-Id header for unique visitor tracking.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Post slug"
+          },
+          {
+            "in": "header",
+            "name": "X-Visitor-Id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique visitor identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "View recorded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "View recorded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/posts/{slug}": {
+      "get": {
+        "tags": [
+          "Blog Public"
+        ],
+        "summary": "Get post by slug",
+        "description": "Retrieve a single published post by its slug",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Post slug"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/posts": {
+      "get": {
+        "tags": [
+          "Blog Public"
+        ],
+        "summary": "Get all published posts",
+        "description": "Retrieve a list of all published blog posts with category, author, and tags",
+        "responses": {
+          "200": {
+            "description": "List of published posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "type": "string"
+                          },
+                          "thumbnail": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "draft",
+                              "published"
+                            ]
+                          },
+                          "category": {
+                            "type": "object"
+                          },
+                          "author": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          },
+                          "post_tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "object"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/auth/verify-email": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Verify email",
+        "description": "Verify user email using verification token from email link",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Email verification token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified successfully"
+          },
+          "400": {
+            "description": "Invalid, expired, or already verified token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/auth/profile": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Update user profile",
+        "description": "Update the authenticated user's name and/or email",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "johnnew@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Email already used by another user"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get user profile",
+        "description": "Retrieve the authenticated user's profile",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/password/reset-password": {
+      "post": {
+        "tags": [
+          "Password"
+        ],
+        "summary": "Reset password",
+        "description": "Reset password using token received via email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token",
+                  "password"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "Reset password token from email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "newpassword456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          },
+          "400": {
+            "description": "Invalid, expired, or already used token"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/auth/resend-verification": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Resend verification email",
+        "description": "Resend email verification link to the specified email address",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email resent if email is registered"
+          },
+          "400": {
+            "description": "Invalid email or email already verified"
+          },
+          "429": {
+            "description": "Previous verification link still valid"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register a new user",
+        "description": "Create a new user account. A verification email will be sent.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Registrasi berhasil. Silakan cek email untuk verifikasi."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "user"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "409": {
+            "description": "Email already registered"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Get current user",
+        "description": "Retrieve the currently authenticated user's data",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string"
+                        },
+                        "email_verified_at": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "created_at": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "description": "Clear auth token cookie (requires authentication)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Logout berhasil"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "description": "Authenticate user and return JWT token. Token is also set as httpOnly cookie.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string"
+                        },
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string"
+                            },
+                            "role": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Invalid email or password"
+          },
+          "403": {
+            "description": "Email not verified"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/password/forgot-password": {
+      "post": {
+        "tags": [
+          "Password"
+        ],
+        "summary": "Forgot password",
+        "description": "Send password reset link to email. Rate limited to 3 requests per 30 minutes.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reset link sent if email is registered"
+          },
+          "400": {
+            "description": "Invalid email"
+          },
+          "429": {
+            "description": "Too many requests - rate limited"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/auth/change-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Change password",
+        "description": "Change the authenticated user's password",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "currentPassword",
+                  "newPassword"
+                ],
+                "properties": {
+                  "currentPassword": {
+                    "type": "string",
+                    "example": "oldpassword123"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "newpassword456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          },
+          "400": {
+            "description": "Validation error or incorrect current password"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/stats/total-views": {
+      "get": {
+        "tags": [
+          "Admin Stats"
+        ],
+        "summary": "Get total views",
+        "description": "Retrieve total page views across all posts (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Total views count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "total_views": {
+                          "type": "integer",
+                          "example": 1500
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/tags/{id}": {
+      "put": {
+        "tags": [
+          "Admin Tags"
+        ],
+        "summary": "Update a tag",
+        "description": "Update an existing tag by ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Tag ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "slug"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "JS"
+                  },
+                  "slug": {
+                    "type": "string",
+                    "example": "js"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tag updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Tag not found"
+          },
+          "409": {
+            "description": "Slug already used"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Admin Tags"
+        ],
+        "summary": "Delete a tag",
+        "description": "Delete a tag by ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Tag ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Tag not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/tags": {
+      "post": {
+        "tags": [
+          "Admin Tags"
+        ],
+        "summary": "Create a tag",
+        "description": "Create a new tag (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "slug"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "JavaScript"
+                  },
+                  "slug": {
+                    "type": "string",
+                    "example": "javascript"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tag created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "409": {
+            "description": "Slug already used"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/comments": {
+      "get": {
+        "tags": [
+          "Admin Comments"
+        ],
+        "summary": "Get all comments (paginated)",
+        "description": "Retrieve all comments with pagination (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Page number"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 100
+            },
+            "description": "Items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated comments list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object"
+                          }
+                        },
+                        "pagination": {
+                          "type": "object",
+                          "properties": {
+                            "page": {
+                              "type": "integer"
+                            },
+                            "limit": {
+                              "type": "integer"
+                            },
+                            "total": {
+                              "type": "integer"
+                            },
+                            "totalPages": {
+                              "type": "integer"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/comments/{id}": {
+      "delete": {
+        "tags": [
+          "Admin Comments"
+        ],
+        "summary": "Delete a comment (admin)",
+        "description": "Delete any comment by ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Comment ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Comment not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/categories/{id}": {
+      "put": {
+        "tags": [
+          "Admin Categories"
+        ],
+        "summary": "Update a category",
+        "description": "Update an existing category by ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Category ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "slug"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Teknologi Update"
+                  },
+                  "slug": {
+                    "type": "string",
+                    "example": "teknologi-update"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "409": {
+            "description": "Slug already used"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Admin Categories"
+        ],
+        "summary": "Delete a category",
+        "description": "Delete a category by ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Category ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/categories": {
+      "post": {
+        "tags": [
+          "Admin Categories"
+        ],
+        "summary": "Create a category",
+        "description": "Create a new category (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "slug"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Teknologi"
+                  },
+                  "slug": {
+                    "type": "string",
+                    "example": "teknologi"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "409": {
+            "description": "Slug already used"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/posts/{id}": {
+      "put": {
+        "tags": [
+          "Admin Blog"
+        ],
+        "summary": "Update a news post",
+        "description": "Update an existing blog post with optional thumbnail upload (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Post ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 5,
+                    "example": "Perkembangan AI di Indonesia 2026"
+                  },
+                  "slug": {
+                    "type": "string",
+                    "example": "perkembangan-ai-di-indonesia-2026"
+                  },
+                  "content": {
+                    "type": "string",
+                    "minLength": 15,
+                    "example": "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>"
+                  },
+                  "category_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "draft",
+                      "published"
+                    ],
+                    "example": "published"
+                  },
+                  "tag_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "example": [
+                      1,
+                      2,
+                      3
+                    ]
+                  },
+                  "meta_title": {
+                    "type": "string",
+                    "example": "AI Indonesia 2026 - Perkembangan Terbaru"
+                  },
+                  "meta_description": {
+                    "type": "string",
+                    "example": "Simak perkembangan terbaru AI di Indonesia tahun 2026"
+                  },
+                  "thumbnail": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "remove_thumbnail": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "News post updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berita berhasil diperbarui"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "user_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Perkembangan AI di Indonesia 2026"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "example": "perkembangan-ai-di-indonesia-2026"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>"
+                        },
+                        "category_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "draft",
+                            "published"
+                          ],
+                          "example": "published"
+                        },
+                        "thumbnail": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "https://example.com/uploads/thumbnail.jpg"
+                        },
+                        "meta_title": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "AI Indonesia 2026 - Perkembangan Terbaru"
+                        },
+                        "meta_description": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "Simak perkembangan terbaru AI di Indonesia tahun 2026"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "example": "2026-06-29T10:00:00.000Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "409": {
+            "description": "Slug already used"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Admin Blog"
+        ],
+        "summary": "Get post by ID",
+        "description": "Retrieve a single post by its ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Post ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Detail berita berhasil diambil"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "user_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Perkembangan AI di Indonesia 2026"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "example": "perkembangan-ai-di-indonesia-2026"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>"
+                        },
+                        "category_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "draft",
+                            "published"
+                          ],
+                          "example": "draft"
+                        },
+                        "thumbnail": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        },
+                        "meta_title": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "AI Indonesia 2026 - Perkembangan Terbaru"
+                        },
+                        "meta_description": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "Simak perkembangan terbaru AI di Indonesia tahun 2026"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "example": "2026-06-29T10:00:00.000Z"
+                        },
+                        "category": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Teknologi"
+                            },
+                            "slug": {
+                              "type": "string",
+                              "example": "teknologi"
+                            }
+                          }
+                        },
+                        "post_tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "post_id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "tag_id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "tag": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "example": "AI"
+                                  },
+                                  "slug": {
+                                    "type": "string",
+                                    "example": "ai"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "example": {
+                        "id": 1,
+                        "user_id": 1,
+                        "title": "Perkembangan AI di Indonesia 2026",
+                        "slug": "perkembangan-ai-di-indonesia-2026",
+                        "content": "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>",
+                        "category_id": 1,
+                        "status": "draft",
+                        "thumbnail": null,
+                        "meta_title": "AI Indonesia 2026 - Perkembangan Terbaru",
+                        "meta_description": "Simak perkembangan terbaru AI di Indonesia tahun 2026",
+                        "created_at": "2026-06-29T10:00:00.000Z",
+                        "category": {
+                          "id": 1,
+                          "name": "Teknologi",
+                          "slug": "teknologi"
+                        },
+                        "post_tags": [
+                          {
+                            "id": 1,
+                            "post_id": 1,
+                            "tag_id": 1,
+                            "tag": {
+                              "id": 1,
+                              "name": "AI",
+                              "slug": "ai"
+                            }
+                          },
+                          {
+                            "id": 2,
+                            "post_id": 1,
+                            "tag_id": 2,
+                            "tag": {
+                              "id": 2,
+                              "name": "Machine Learning",
+                              "slug": "machine-learning"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Admin Blog"
+        ],
+        "summary": "Delete a news post",
+        "description": "Delete a blog post by ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Post ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berita berhasil dihapus"
+                    },
+                    "data": {
+                      "type": null,
+                      "example": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/posts/save-generated": {
+      "post": {
+        "tags": [
+          "Admin Blog"
+        ],
+        "summary": "Save AI-generated content",
+        "description": "Save AI-generated news content as a draft post (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "news",
+                  "category",
+                  "tags"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Perkembangan AI di Indonesia 2026"
+                  },
+                  "news": {
+                    "type": "string",
+                    "description": "HTML content",
+                    "example": "<p>Gengs, lo pada tau gak sih kalo perkembangan AI di Indonesia sekarang tuh lagi naik daun banget?</p>"
+                  },
+                  "category": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "maxItems": 3,
+                    "example": [
+                      "Teknologi"
+                    ]
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "example": [
+                      "AI",
+                      "Machine Learning",
+                      "Indonesia Digital"
+                    ]
+                  },
+                  "meta_title": {
+                    "type": "string",
+                    "example": "AI Indonesia 2026 - Perkembangan Terbaru"
+                  },
+                  "meta_description": {
+                    "type": "string",
+                    "example": "Simak perkembangan terbaru AI di Indonesia tahun 2026"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Content saved as draft",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berita berhasil disimpan sebagai draft"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "user_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Perkembangan AI di Indonesia 2026"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "example": "perkembangan-ai-di-indonesia-2026"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "<p>Gengs, lo pada tau gak sih kalo perkembangan AI di Indonesia sekarang tuh lagi naik daun banget?</p>"
+                        },
+                        "category_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "draft",
+                            "published"
+                          ],
+                          "example": "draft"
+                        },
+                        "thumbnail": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        },
+                        "meta_title": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "AI Indonesia 2026 - Perkembangan Terbaru"
+                        },
+                        "meta_description": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "Simak perkembangan terbaru AI di Indonesia tahun 2026"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "example": "2026-06-29T10:00:00.000Z"
+                        },
+                        "category": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Teknologi"
+                            },
+                            "slug": {
+                              "type": "string",
+                              "example": "teknologi"
+                            }
+                          }
+                        },
+                        "post_tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "post_id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "tag_id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "tag": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "example": "AI"
+                                  },
+                                  "slug": {
+                                    "type": "string",
+                                    "example": "ai"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/posts": {
+      "get": {
+        "tags": [
+          "Admin Blog"
+        ],
+        "summary": "Get all news (admin)",
+        "description": "Retrieve all news posts with view counts (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all news",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Daftar berita berhasil diambil"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "user_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "Perkembangan AI di Indonesia 2026"
+                          },
+                          "slug": {
+                            "type": "string",
+                            "example": "perkembangan-ai-di-indonesia-2026"
+                          },
+                          "content": {
+                            "type": "string",
+                            "example": "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>"
+                          },
+                          "category_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "draft",
+                              "published"
+                            ],
+                            "example": "draft"
+                          },
+                          "thumbnail": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": null
+                          },
+                          "meta_title": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "AI Indonesia 2026 - Perkembangan Terbaru"
+                          },
+                          "meta_description": {
+                            "type": "string",
+                            "nullable": true,
+                            "example": "Simak perkembangan terbaru AI di Indonesia tahun 2026"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "example": "2026-06-29T10:00:00.000Z"
+                          },
+                          "category": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Teknologi"
+                              },
+                              "slug": {
+                                "type": "string",
+                                "example": "teknologi"
+                              }
+                            }
+                          },
+                          "post_tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "post_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "tag_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "tag": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer",
+                                      "example": 1
+                                    },
+                                    "name": {
+                                      "type": "string",
+                                      "example": "AI"
+                                    },
+                                    "slug": {
+                                      "type": "string",
+                                      "example": "ai"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "example": [
+                        {
+                          "id": 1,
+                          "user_id": 1,
+                          "title": "Perkembangan AI di Indonesia 2026",
+                          "slug": "perkembangan-ai-di-indonesia-2026",
+                          "content": "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>",
+                          "category_id": 1,
+                          "status": "draft",
+                          "thumbnail": null,
+                          "meta_title": "AI Indonesia 2026 - Perkembangan Terbaru",
+                          "meta_description": "Simak perkembangan terbaru AI di Indonesia tahun 2026",
+                          "created_at": "2026-06-29T10:00:00.000Z",
+                          "category": {
+                            "id": 1,
+                            "name": "Teknologi",
+                            "slug": "teknologi"
+                          },
+                          "post_tags": [
+                            {
+                              "id": 1,
+                              "post_id": 1,
+                              "tag_id": 1,
+                              "tag": {
+                                "id": 1,
+                                "name": "AI",
+                                "slug": "ai"
+                              }
+                            },
+                            {
+                              "id": 2,
+                              "post_id": 1,
+                              "tag_id": 2,
+                              "tag": {
+                                "id": 2,
+                                "name": "Machine Learning",
+                                "slug": "machine-learning"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "id": 2,
+                          "user_id": 1,
+                          "title": "Timnas Indonesia Lolos ke Piala Dunia 2026",
+                          "slug": "timnas-indonesia-lolos-ke-piala-dunia-2026",
+                          "content": "<p>Timnas Indonesia berhasil mencatatkan sejarah...</p>",
+                          "category_id": 2,
+                          "status": "published",
+                          "thumbnail": "https://example.com/uploads/thumbnail.jpg",
+                          "meta_title": null,
+                          "meta_description": null,
+                          "created_at": "2026-06-28T08:30:00.000Z",
+                          "category": {
+                            "id": 2,
+                            "name": "Olahraga",
+                            "slug": "olahraga"
+                          },
+                          "post_tags": [
+                            {
+                              "id": 3,
+                              "post_id": 2,
+                              "tag_id": 3,
+                              "tag": {
+                                "id": 3,
+                                "name": "Sepak Bola",
+                                "slug": "sepak-bola"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Admin Blog"
+        ],
+        "summary": "Create a news post",
+        "description": "Create a new blog post with optional thumbnail upload (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "content",
+                  "category_id",
+                  "status"
+                ],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Berita Terbaru"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "HTML content"
+                  },
+                  "category_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "draft",
+                      "published"
+                    ]
+                  },
+                  "tag_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "description": "Array of tag IDs (can be JSON string)"
+                  },
+                  "meta_title": {
+                    "type": "string"
+                  },
+                  "meta_description": {
+                    "type": "string"
+                  },
+                  "thumbnail": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Thumbnail image file"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "News post created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berita berhasil dibuat"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "user_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Perkembangan AI di Indonesia 2026"
+                        },
+                        "slug": {
+                          "type": "string",
+                          "example": "perkembangan-ai-di-indonesia-2026"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>"
+                        },
+                        "category_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "draft",
+                            "published"
+                          ],
+                          "example": "draft"
+                        },
+                        "thumbnail": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": null
+                        },
+                        "meta_title": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "AI Indonesia 2026 - Perkembangan Terbaru"
+                        },
+                        "meta_description": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "Simak perkembangan terbaru AI di Indonesia tahun 2026"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "example": "2026-06-29T10:00:00.000Z"
+                        },
+                        "category": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Teknologi"
+                            },
+                            "slug": {
+                              "type": "string",
+                              "example": "teknologi"
+                            }
+                          }
+                        },
+                        "post_tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "post_id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "tag_id": {
+                                "type": "integer",
+                                "example": 1
+                              },
+                              "tag": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "integer",
+                                    "example": 1
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "example": "AI"
+                                  },
+                                  "slug": {
+                                    "type": "string",
+                                    "example": "ai"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Category not found"
+          },
+          "409": {
+            "description": "Slug already used"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/posts/generate": {
+      "post": {
+        "tags": [
+          "Admin Blog"
+        ],
+        "summary": "Generate content with AI",
+        "description": "Generate news content from a URL using AI (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://www.kompas.com/teknologi/artikel-ai-indonesia-2026"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Content generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Berita berhasil digenerate"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "example": "Perkembangan AI di Indonesia 2026"
+                        },
+                        "news": {
+                          "type": "string",
+                          "example": "<p>Gengs, lo pada tau gak sih kalo perkembangan AI di Indonesia sekarang tuh lagi naik daun banget? Yuk kita bahas bareng-bareng!</p>"
+                        },
+                        "category": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "Teknologi"
+                          ]
+                        },
+                        "tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "example": [
+                            "AI",
+                            "Machine Learning",
+                            "Indonesia Digital"
+                          ]
+                        },
+                        "meta_title": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "AI Indonesia 2026 - Perkembangan Terbaru"
+                        },
+                        "meta_description": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "Simak perkembangan terbaru AI di Indonesia tahun 2026"
+                        },
+                        "provider": {
+                          "type": "string",
+                          "nullable": true,
+                          "example": "gemini"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid URL or validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "502": {
+            "description": "AI service failed"
+          }
+        }
+      }
+    },
+    "/api/admin/ad-positions/{id}": {
+      "put": {
+        "tags": [
+          "Admin Ad Positions"
+        ],
+        "summary": "Update an ad",
+        "description": "Update an existing advertisement by ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Ad ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "ad_code",
+                  "is_active"
+                ],
+                "properties": {
+                  "ad_code": {
+                    "type": "string",
+                    "description": "HTML/JavaScript ad code"
+                  },
+                  "is_active": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ad updated"
+          },
+          "400": {
+            "description": "Validation error or invalid ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Ad not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Admin Ad Positions"
+        ],
+        "summary": "Delete an ad",
+        "description": "Delete an advertisement by ID (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Ad ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ad deleted"
+          },
+          "400": {
+            "description": "Invalid ID"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "404": {
+            "description": "Ad not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/admin/ad-positions": {
+      "get": {
+        "tags": [
+          "Admin Ad Positions"
+        ],
+        "summary": "Get all ads",
+        "description": "Retrieve all advertisement positions (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of ads"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Admin Ad Positions"
+        ],
+        "summary": "Create an ad",
+        "description": "Create a new advertisement position (requires admin)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "position",
+                  "ad_code"
+                ],
+                "properties": {
+                  "position": {
+                    "type": "string",
+                    "enum": [
+                      "auto_ads",
+                      "header",
+                      "sidebar",
+                      "in_article",
+                      "footer"
+                    ],
+                    "example": "header"
+                  },
+                  "ad_code": {
+                    "type": "string",
+                    "description": "HTML/JavaScript ad code"
+                  },
+                  "is_active": {
+                    "type": "boolean",
+                    "default": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ad created"
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - admin only"
+          },
+          "409": {
+            "description": "Position already has an ad"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}

@@ -32,7 +32,7 @@ export async function sendEmail(options: SendEmailOptions) {
       html,
     });
   } catch (error: any) {
-    console.error("[SMTP Error Detail]", error.message); // ← penting
+    console.log("[SMTP Error Detail]", error.message); // ← penting
     throw error;
   }
 }

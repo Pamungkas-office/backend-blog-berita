@@ -171,6 +171,7 @@ const callGroq = async (prompt: string): Promise<AiGeneratedContent> => {
   return content;
 };
 
+
 export const serviceGenerateContent = async (
   url: string,
 ): Promise<AiGeneratedContent> => {

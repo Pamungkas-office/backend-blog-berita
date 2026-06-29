@@ -8,6 +8,45 @@ const tagSchema = z.object({
   slug: z.string().min(1, "Slug tag wajib diisi"),
 });
 
+/**
+ * @openapi
+ * /api/admin/tags:
+ *   post:
+ *     tags: [Admin Tags]
+ *     summary: Create a tag
+ *     description: Create a new tag (requires admin)
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - slug
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: JavaScript
+ *               slug:
+ *                 type: string
+ *                 example: javascript
+ *     responses:
+ *       201:
+ *         description: Tag created
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - admin only
+ *       409:
+ *         description: Slug already used
+ *       500:
+ *         description: Internal server error
+ */
 export const createTag = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = tagSchema.parse(req.body);

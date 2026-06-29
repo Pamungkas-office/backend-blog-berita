@@ -36,7 +36,9 @@ export const serviceSaveGenerated = async (
     }
   }
 
-  for (const name of data.tags) {
+  const uniqueTagNames = [...new Set(data.tags)];
+
+  for (const name of uniqueTagNames) {
     const slug = generateSlug(name);
     let [existing] = await db
       .select()
@@ -87,9 +89,11 @@ export const serviceSaveGenerated = async (
 
     savedPost = inserted;
 
-    if (resolvedTagIds.length > 0) {
+    const uniqueTagIds = [...new Set(resolvedTagIds)];
+
+    if (uniqueTagIds.length > 0) {
       await tx.insert(post_tags).values(
-        resolvedTagIds.map((tagId) => ({
+        uniqueTagIds.map((tagId) => ({
           post_id: inserted!.id,
           tag_id: tagId,
         }))

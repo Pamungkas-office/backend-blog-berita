@@ -2,6 +2,7 @@ import express, { json, urlencoded } from "express";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
 import { error } from "./middleware/error.js";
 import { notFound } from "./middleware/not-found.js";
 import authRouter from "./routes/user/auth.routes.js";
@@ -18,6 +19,7 @@ import adminAdRouter from "./routes/admin/ad.routes.js";
 import adminStatsRouter from "./routes/admin/stats.routes.js";
 import commentRoutes from "./routes/user/comment.routes.js";
 import { validateEnv, getCorsOrigins } from "./config/env.js";
+import { swaggerSpec } from "./config/swagger.js";
 
 validateEnv();
 
@@ -38,14 +40,19 @@ app.use(
 
 // Serve uploaded files
 app.use("/uploads", express.static("uploads"));
-
-// Health check
 app.get("/", (_req, res) => {
   res.json({
     success: true,
     message: "Blog API is running",
     timestamp: new Date().toISOString(),
   });
+});
+
+// Swagger documentation
+app.use("/api/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get("/api/api-docs.json", (_req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
 });
 
 // Routes

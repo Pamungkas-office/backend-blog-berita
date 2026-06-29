@@ -31,6 +31,104 @@ const updatePostSchema = z.object({
     .optional(),
 });
 
+/**
+ * @openapi
+ * /api/admin/posts/{id}:
+ *   put:
+ *     tags: [Admin Blog]
+ *     summary: Update a news post
+ *     description: Update an existing blog post with optional thumbnail upload (requires admin)
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Post ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 minLength: 5
+ *                 example: Perkembangan AI di Indonesia 2026
+ *               slug:
+ *                 type: string
+ *                 example: perkembangan-ai-di-indonesia-2026
+ *               content:
+ *                 type: string
+ *                 minLength: 15
+ *                 example: "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>"
+ *               category_id:
+ *                 type: integer
+ *                 example: 1
+ *               status:
+ *                 type: string
+ *                 enum: [draft, published]
+ *                 example: published
+ *               tag_ids:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [1, 2, 3]
+ *               meta_title:
+ *                 type: string
+ *                 example: AI Indonesia 2026 - Perkembangan Terbaru
+ *               meta_description:
+ *                 type: string
+ *                 example: Simak perkembangan terbaru AI di Indonesia tahun 2026
+ *               thumbnail:
+ *                 type: string
+ *                 format: binary
+ *               remove_thumbnail:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: News post updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Berita berhasil diperbarui
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id: { type: integer, example: 1 }
+ *                     user_id: { type: integer, example: 1 }
+ *                     title: { type: string, example: Perkembangan AI di Indonesia 2026 }
+ *                     slug: { type: string, example: perkembangan-ai-di-indonesia-2026 }
+ *                     content: { type: string, example: "<p>Perkembangan kecerdasan buatan di Indonesia semakin pesat...</p>" }
+ *                     category_id: { type: integer, example: 1 }
+ *                     status: { type: string, enum: [draft, published], example: published }
+ *                     thumbnail: { type: string, nullable: true, example: "https://example.com/uploads/thumbnail.jpg" }
+ *                     meta_title: { type: string, nullable: true, example: AI Indonesia 2026 - Perkembangan Terbaru }
+ *                     meta_description: { type: string, nullable: true, example: Simak perkembangan terbaru AI di Indonesia tahun 2026 }
+ *                     created_at: { type: string, example: "2026-06-29T10:00:00.000Z" }
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - admin only
+ *       404:
+ *         description: Post not found
+ *       409:
+ *         description: Slug already used
+ *       500:
+ *         description: Internal server error
+ */
 export const updateNews = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id);

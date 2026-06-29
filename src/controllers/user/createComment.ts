@@ -3,6 +3,59 @@ import { serviceCreateComment } from "../../services/user/comments/createComment
 import { sendSuccess } from "../../utils/response.js";
 import { CustomError } from "../../lib/custom-error.js";
 
+/**
+ * @openapi
+ * /api/comments/{slug}:
+ *   post:
+ *     tags: [Comments]
+ *     summary: Create a comment
+ *     description: Add a comment to a post (requires authentication)
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: slug
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Post slug
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - comment
+ *             properties:
+ *               comment:
+ *                 type: string
+ *                 description: Comment text
+ *     responses:
+ *       201:
+ *         description: Comment created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Komentar berhasil ditambahkan
+ *                 data:
+ *                   type: object
+ *       400:
+ *         description: Invalid input or empty comment
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Internal server error
+ */
 export const createComment = async (
   req: Request,
   res: Response,
