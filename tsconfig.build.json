@@ -12,5 +12,5 @@
     "sourceMap": false
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "src/lib/db/seeding.ts"]
+  "exclude": ["node_modules", "dist", "src/lib/db/seeding.ts", "src/**/*.test.ts", "src/**/test/**"]
 }
