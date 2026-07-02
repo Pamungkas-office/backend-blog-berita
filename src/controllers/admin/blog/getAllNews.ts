@@ -107,10 +107,16 @@ import { sendSuccess } from "../../../utils/response.js";
  *       500:
  *         description: Internal server error
  */
-export const getAllNews = async (_req: Request, res: Response, next: NextFunction) => {
+export const getAllNews = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const news = await getAllNewsAdmin();
-    sendSuccess(res, news, "Daftar berita berhasil diambil");
+    const isSuperAdmin = req.user?.role === "super_admin";
+    const userId = req.user ? Number(req.user.id) : undefined;
+    const page = req.query.page ? parseInt(req.query.page as string) : undefined;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
+    const status = req.query.status as "draft" | "waiting_approval" | "approved" | "revision" | "published" | undefined;
+
+    const result = await getAllNewsAdmin(userId, isSuperAdmin, page, limit, status);
+    sendSuccess(res, result, "Daftar berita berhasil diambil");
   } catch (error) {
     next(error);
   }

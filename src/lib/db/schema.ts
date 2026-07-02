@@ -32,7 +32,7 @@ export const users = sqliteTable(
     /** Unique enforced via uniqueIndex below */
     email: text("email").notNull(),
     password: text("password").notNull(),
-    role: text("role", { enum: ["admin", "user"] })
+    role: text("role", { enum: ["super_admin", "admin", "user"] })
       .notNull()
       .default("user"),
     email_verified_at: text("email_verified_at"),
@@ -51,7 +51,28 @@ export const users = sqliteTable(
 );
 
 // ─────────────────────────────────────────────
-// 2. CATEGORIES
+// 2. MASTER ADMIN  —  extension table for admin users
+// ─────────────────────────────────────────────
+export const masterAdmin = sqliteTable(
+  "master_admin",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    user_id: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    /** Whether this admin has approval rights */
+    is_approver: integer("is_approver", { mode: "boolean" })
+      .notNull()
+      .default(false),
+  },
+  (t) => ({
+    /** 1:1 with users */
+    userIdUnique: uniqueIndex("master_admin_user_id_idx").on(t.user_id),
+  }),
+);
+
+// ─────────────────────────────────────────────
+// 3. CATEGORIES
 // ─────────────────────────────────────────────
 export const categories = sqliteTable(
   "categories",
@@ -100,8 +121,17 @@ export const posts = sqliteTable(
     content: text("content").notNull(),
     /** URL thumbnail/cover image */
     thumbnail: text("thumbnail"),
-    /** draft | published */
-    status: text("status", { enum: ["draft", "published"] })
+    /**
+     * Status workflow:
+     * draft            — admin masih ngirim progress
+     * waiting_approval — sudah dikirim, nunggu review
+     * approved         — sudah cukup approvals, siap publish
+     * revision         — ditolak/diminta revisi oleh approver
+     * published        — sudah tayang
+     */
+    status: text("status", {
+      enum: ["draft", "waiting_approval", "approved", "revision", "published"],
+    })
       .notNull()
       .default("draft"),
     /** SEO */
@@ -110,6 +140,8 @@ export const posts = sqliteTable(
     created_at: text("created_at")
       .notNull()
       .default(sql`(CURRENT_TIMESTAMP)`),
+    /** Timestamp when super_admin publishes the post */
+    published_at: text("published_at"),
   },
   (t) => ({
     /** URL resolution — most frequent public query */
@@ -288,11 +320,63 @@ export const page_views = sqliteTable(
 );
 
 // ─────────────────────────────────────────────
+// 10. LOG APPROVALS  — approval & revision history
+// ─────────────────────────────────────────────
+export const logApprovals = sqliteTable(
+  "log_approvals",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    post_id: integer("post_id")
+      .notNull()
+      .references(() => posts.id, { onDelete: "cascade" }),
+    approver_id: integer("approver_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    /** 0 = revision, 1 = approved */
+    action: integer("action").notNull(),
+    /** Rich-text notes — required when action = 'revision', nullable for approval */
+    notes: text("notes"),
+    /** Soft toggle: set to false when admin resubmits a revision */
+    is_active: integer("is_active", { mode: "boolean" })
+      .notNull()
+      .default(true),
+    created_at: text("created_at")
+      .notNull()
+      .default(sql`(CURRENT_TIMESTAMP)`),
+  },
+  (t) => ({
+    postIdx: index("log_approvals_post_idx").on(t.post_id),
+    approverIdx: index("log_approvals_approver_idx").on(t.approver_id),
+    activePostActionIdx: index("log_approvals_active_post_action_idx").on(
+      t.is_active,
+      t.post_id,
+      t.action,
+    ),
+  }),
+);
+
+// ─────────────────────────────────────────────
+// 11. APPROVAL CONFIG  — global threshold settings
+// ─────────────────────────────────────────────
+export const approvalConfig = sqliteTable("approval_config", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  /** How many admin-approver approvals are needed (super_admin is mandatory) */
+  min_admin_approvals: integer("min_admin_approvals").notNull().default(2),
+  updated_at: text("updated_at")
+    .notNull()
+    .default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+// ─────────────────────────────────────────────
 // RELATIONS  (for Drizzle relational queries)
 // ─────────────────────────────────────────────
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ many, one }) => ({
   posts: many(posts),
   comments: many(comments),
+  masterAdmin: one(masterAdmin, {
+    fields: [users.id],
+    references: [masterAdmin.user_id],
+  }),
 }));
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
@@ -312,6 +396,7 @@ export const postsRelations = relations(posts, ({ one, many }) => ({
   post_tags: many(post_tags),
   comments: many(comments),
   page_views: many(page_views),
+  log_approvals: many(logApprovals),
 }));
 
 export const postTagsRelations = relations(post_tags, ({ one }) => ({
@@ -327,6 +412,18 @@ export const commentsRelations = relations(comments, ({ one }) => ({
 export const pageViewsRelations = relations(page_views, ({ one }) => ({
   post: one(posts, { fields: [page_views.post_id], references: [posts.id] }),
   user: one(users, { fields: [page_views.user_id], references: [users.id] }),
+}));
+
+export const logApprovalsRelations = relations(logApprovals, ({ one }) => ({
+  post: one(posts, { fields: [logApprovals.post_id], references: [posts.id] }),
+  approver: one(users, {
+    fields: [logApprovals.approver_id],
+    references: [users.id],
+  }),
+}));
+
+export const masterAdminRelations = relations(masterAdmin, ({ one }) => ({
+  user: one(users, { fields: [masterAdmin.user_id], references: [users.id] }),
 }));
 
 export const passwordResetsRelations = relations(passwordResets, ({ one }) => ({

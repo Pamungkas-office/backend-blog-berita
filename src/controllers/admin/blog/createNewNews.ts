@@ -7,7 +7,10 @@ import { generateSlug } from "../../../utils/slug.js";
 export const createNewsSchema = z.object({
   title: z.string(),
   content: z.string(),
-  status: z.enum(["draft", "published"]),
+  status: z
+    .enum(["draft", "waiting_approval"])
+    .optional()
+    .default("waiting_approval"),
 
   category_id: z.coerce.number({
     error: "Category ID harus berupa angka",
@@ -148,6 +151,10 @@ export const createNewNews = async (
     const data = createNewsSchema.parse(req.body);
     const slug = generateSlug(data.title);
 
+    // Super admin can create with any allowed status; regular admin defaults to waiting_approval
+    const isSuperAdmin = req.user!.role === "super_admin";
+    const finalStatus = isSuperAdmin ? data.status : "waiting_approval";
+
     const post = await serviceCreatePost(
       Number(req.user!.id),
       {
@@ -155,7 +162,7 @@ export const createNewNews = async (
         slug,
         content: data.content,
         category_id: data.category_id,
-        status: data.status,
+        status: finalStatus,
         meta_title: data.meta_title ?? null,
         meta_description: data.meta_description ?? null,
         tag_ids: data.tag_ids,

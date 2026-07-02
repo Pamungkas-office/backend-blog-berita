@@ -11,7 +11,7 @@ export const serviceCreatePost = async (
     slug: string;
     content: string;
     category_id: number;
-    status: "draft" | "published";
+    status: "draft" | "waiting_approval";
     meta_title?: string | null;
     meta_description?: string | null;
     tag_ids?: number[];

@@ -12,7 +12,7 @@ const updatePostSchema = z.object({
   category_id: z.coerce.number({
     error: "Category ID harus berupa angka",
   }).positive("Category ID tidak valid").optional(),
-  status: z.enum(["draft", "published"]).optional(),
+  status: z.enum(["draft", "waiting_approval"]).optional(),
   thumbnail: z.string().nullable().optional(),
   meta_title: z.string().nullable().optional(),
   meta_description: z.string().nullable().optional(),
@@ -144,6 +144,8 @@ export const updateNews = async (req: Request, res: Response, next: NextFunction
       thumbnail = await MediaService.uploadThumbnail(req.file);
     }
 
+    const isSuperAdmin = req.user!.role === "super_admin";
+
     const post = await serviceUpdatePost(id, {
       title: data.title,
       slug,
@@ -154,6 +156,9 @@ export const updateNews = async (req: Request, res: Response, next: NextFunction
       meta_title: data.meta_title,
       meta_description: data.meta_description,
       tag_ids: data.tag_ids,
+    }, {
+      isSuperAdmin,
+      userId: Number(req.user!.id),
     });
 
     sendSuccess(res, post, "Berita berhasil diperbarui");

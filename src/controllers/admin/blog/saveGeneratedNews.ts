@@ -131,6 +131,8 @@ export const saveGeneratedNews = async (
   try {
     const data = saveGeneratedNewsSchema.parse(req.body);
 
+    const isSuperAdmin = req.user!.role === "super_admin";
+
     const post = await serviceSaveGenerated(Number(req.user!.id), {
       title: data.title,
       news: data.news,
@@ -138,9 +140,9 @@ export const saveGeneratedNews = async (
       tags: data.tags,
       meta_title: data.meta_title ?? null,
       meta_description: data.meta_description ?? null,
-    });
+    }, isSuperAdmin);
 
-    sendSuccess(res, post, "Berita berhasil disimpan sebagai draft", 201);
+    sendSuccess(res, post, "Berita berhasil disimpan", 201);
   } catch (error) {
     next(error);
   }

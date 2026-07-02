@@ -2,8 +2,8 @@ import type { NextFunction, Request, Response } from "express";
 import { CustomError } from "../lib/custom-error.js";
 
 export const requireAdmin = (req: Request, _res: Response, next: NextFunction) => {
-  if (!req.user || req.user.role !== "admin") {
+  if (!req.user || (req.user.role !== "admin" && req.user.role !== "super_admin")) {
     return next(new CustomError("Akses ditolak. Hanya admin yang diizinkan", 403));
-  } 
+  }
   next();
 };

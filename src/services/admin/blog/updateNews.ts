@@ -10,12 +10,13 @@ export const serviceUpdatePost = async (
     slug?: string;
     content?: string;
     category_id?: number;
-    status?: "draft" | "published";
+    status?: "draft" | "waiting_approval";
     thumbnail?: string | null;
     meta_title?: string | null;
     meta_description?: string | null;
     tag_ids?: number[];
   },
+  context?: { isSuperAdmin: boolean; userId: number },
 ) => {
   const [existing] = await db
     .select()
@@ -25,6 +26,21 @@ export const serviceUpdatePost = async (
 
   if (!existing) {
     throw new CustomError("Post tidak ditemukan", 404);
+  }
+
+  // Permission check: non-super-admin can only edit draft / waiting_approval / revision posts
+  if (context && !context.isSuperAdmin) {
+    if (!["draft", "waiting_approval", "revision"].includes(existing.status)) {
+      throw new CustomError(
+        "Anda tidak dapat mengedit post dengan status ini",
+        403,
+      );
+    }
+
+    // Only the creator can edit
+    if (existing.user_id !== context.userId) {
+      throw new CustomError("Anda hanya dapat mengedit post milik sendiri", 403);
+    }
   }
 
   if (data.slug && data.slug !== existing.slug) {

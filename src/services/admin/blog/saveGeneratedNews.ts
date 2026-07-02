@@ -12,7 +12,8 @@ import type { AiGeneratedContent } from "./generateNews.js";
 
 export const serviceSaveGenerated = async (
   userId: number,
-  data: AiGeneratedContent
+  data: AiGeneratedContent,
+  isSuperAdmin: boolean = false,
 ) => {
   const resolvedCategoryIds: number[] = [];
   const resolvedTagIds: number[] = [];
@@ -81,7 +82,7 @@ export const serviceSaveGenerated = async (
         slug: postSlug,
         content: data.news,
         category_id: resolvedCategoryIds[0]!,
-        status: "draft",
+        status: isSuperAdmin ? "draft" : "waiting_approval",
         meta_title: data.meta_title || null,
         meta_description: data.meta_description || null,
       })

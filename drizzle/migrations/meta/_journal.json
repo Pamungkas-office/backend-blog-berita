@@ -8,6 +8,20 @@
       "when": 1782458907107,
       "tag": "0000_normal_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1782794920805,
+      "tag": "0001_faithful_skin",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1782960487015,
+      "tag": "0002_ambiguous_retro_girl",
+      "breakpoints": true
     }
   ]
 }

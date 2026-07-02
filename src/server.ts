@@ -17,6 +17,9 @@ import adminTagRouter from "./routes/admin/tag.routes.js";
 import adminCommentRouter from "./routes/admin/comment.routes.js";
 import adminAdRouter from "./routes/admin/ad.routes.js";
 import adminStatsRouter from "./routes/admin/stats.routes.js";
+import adminApprovalRouter from "./routes/admin/approval.routes.js";
+import superAdminApprovalRouter from "./routes/super_admin/approval.routes.js";
+import superAdminRouter from "./routes/super_admin/super-admin.routes.js";
 import commentRoutes from "./routes/user/comment.routes.js";
 import { validateEnv, getCorsOrigins } from "./config/env.js";
 import { swaggerSpec } from "./config/swagger.js";
@@ -91,6 +94,9 @@ app.use("/api/admin/tags", adminTagRouter);
 app.use("/api/admin/comments", adminCommentRouter);
 app.use("/api/admin/ad-positions", adminAdRouter);
 app.use("/api/admin/stats", adminStatsRouter);
+app.use("/api/admin/approval", adminApprovalRouter);
+app.use("/api/super-admin/approval", superAdminApprovalRouter);
+app.use("/api/admin/super-admin", superAdminRouter);
 
 // Error handlers (harus di paling bawah)
 app.use(notFound);
